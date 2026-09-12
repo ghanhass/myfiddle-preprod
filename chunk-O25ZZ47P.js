@@ -421,6 +421,8 @@ ${n.map((r,i)=>`${i+1}) ${r.toString()}`).join(`
     <!DOCTYPE html>
     <html>
         <head>
+        <meta charset="utf-8">
+        <meta name="referrer" content="strict-origin-when-cross-origin">
         </head>
         <body> 
             <!---->
