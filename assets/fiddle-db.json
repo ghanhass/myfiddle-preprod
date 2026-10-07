@@ -1607,6 +1607,27 @@
       "createdAt": 1790956674884,
       "appMode": "pastebin",
       "id": "MBjHDjLQDq8"
+    },
+    {
+      "js": "",
+      "html": "8",
+      "css": "",
+      "pastebintext": "",
+      "jsPartSize": 349,
+      "cssPartSize": 349,
+      "htmlPartSize": 349,
+      "codesPartSize": 350,
+      "mainContainerWidth": 1080,
+      "mainContainerHeight": 1058,
+      "mainContainerSize": 1058,
+      "title": "8",
+      "layout": 1,
+      "mobileLayout": "1:1",
+      "iframeResizeValue": 1048,
+      "isMobileMode": false,
+      "createdAt": 1791380474746,
+      "appMode": "fiddle",
+      "id": "btQi1D2ra-o"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
