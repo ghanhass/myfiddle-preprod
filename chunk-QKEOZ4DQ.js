@@ -53716,27 +53716,29 @@ var MainComponent = class _MainComponent {
     }
     this.persistedFiddleData$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((res) => {
       if (this.mainService.isFiddleWithId(res)) {
-        if (res.isMobileMode) {
-          this.changeLayout(1);
-          let mobileLayoutArr = res.mobileLayout?.split(":");
-          let mobileCodePart = mobileLayoutArr[0];
-          let mobileResult = mobileLayoutArr[1];
-          let showHtmlForMobile = mobileCodePart === "1";
-          let showCssForMobile = mobileCodePart === "2";
-          let showJsForMobile = mobileCodePart === "3";
-          let showResultForMobile = mobileResult === "1";
-          this.store.dispatch(updateRuntimeLayoutDataAction({
-            mobileLayoutData: {
-              showHtmlForMobile,
-              showCssForMobile,
-              showJsForMobile,
-              showResultForMobile
-            }
-          }));
-        } else {
-          this.changeLayout(res.layout, res);
-        }
-        this.fiddleTitle.set(res.title);
+        setTimeout(() => {
+          if (res.isMobileMode) {
+            this.changeLayout(1);
+            let mobileLayoutArr = res.mobileLayout?.split(":");
+            let mobileCodePart = mobileLayoutArr[0];
+            let mobileResult = mobileLayoutArr[1];
+            let showHtmlForMobile = mobileCodePart === "1";
+            let showCssForMobile = mobileCodePart === "2";
+            let showJsForMobile = mobileCodePart === "3";
+            let showResultForMobile = mobileResult === "1";
+            this.store.dispatch(updateRuntimeLayoutDataAction({
+              mobileLayoutData: {
+                showHtmlForMobile,
+                showCssForMobile,
+                showJsForMobile,
+                showResultForMobile
+              }
+            }));
+          } else {
+            this.changeLayout(res.layout, res);
+          }
+          this.fiddleTitle.set(res.title);
+        }, 1);
       }
     });
     this.IsAfterViewInitReached = true;
