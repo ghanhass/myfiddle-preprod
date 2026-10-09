@@ -39842,6 +39842,9 @@ var MainService = class _MainService {
   fiddlesHistoryListPage = this.store.selectSignal(selectFiddlesHistoryListPage);
   requestRunCode = new Subject();
   changePasteBinSyntax = new Subject();
+  arbitraryHtmlIds = [
+    "hassane-ghanmi"
+  ];
   currentFiddleId = signal("", ...ngDevMode ? [{ debugName: "currentFiddleId" }] : (
     /* istanbul ignore next */
     []
@@ -39856,6 +39859,7 @@ var MainService = class _MainService {
   redirectAfterSaveMode = false;
   codeSavingDate = /* @__PURE__ */ new Date();
   scheduledRunFiddle = false;
+  scheduledRunFiddleWithArbitraryHtml = false;
   redirectToOtherFiddle = false;
   themesList = [
     fiddleThemeLight,
@@ -40728,7 +40732,11 @@ var IframePartComponent = class _IframePartComponent {
       this.store.dispatch(updateIframeLoadingStatusAction({ loading: false }));
       if (this.mainService.scheduledRunFiddle && this.isIframeReady()) {
         this.mainService.scheduledRunFiddle = false;
-        this.runFiddle();
+        if (this.mainService.arbitraryHtmlIds.includes(this.mainService.currentFiddleId())) {
+          this.runFiddle(JSON.stringify({ arbitraryHtmlFromId: this.mainService.currentFiddleId() }));
+        } else {
+          this.runFiddle();
+        }
       } else {
       }
     } else if (event.data.type == "run-message-received") {
@@ -40737,22 +40745,33 @@ var IframePartComponent = class _IframePartComponent {
     }
   };
   runFiddle(arbitraryFiddleData) {
-    let fiddleData = arbitraryFiddleData || this.fiddleData();
-    if (fiddleData.appMode == "fiddle") {
-      this.store.dispatch(updateIframeLoadingStatusAction({ loading: true }));
-      let data = {
-        js: fiddleData.js,
-        css: fiddleData.css,
-        html: fiddleData.html
-        //isConsoleOn: this.mainService.isConsoleOn
-      };
-      let obj = {
-        html: data.html,
-        css: data.css,
-        js: data.js,
-        currentTheme: this.runtimeLayoutData().fiddleTheme?.data
-      };
-      this.postMessageToIframe("run", JSON.stringify(obj));
+    console.log("arbitraryFiddleData = ", arbitraryFiddleData);
+    console.log("typeof arbitraryFiddleData = ", typeof arbitraryFiddleData);
+    if (typeof arbitraryFiddleData == "string") {
+      let obj = JSON.parse(arbitraryFiddleData);
+      if (this.mainService.arbitraryHtmlIds.includes(obj.arbitraryHtmlFromId)) {
+        console.log("AAA");
+        this.postMessageToIframe("run-arbitrary-html", obj.arbitraryHtmlFromId);
+      }
+    } else {
+      let fiddleData = arbitraryFiddleData || this.fiddleData();
+      if (fiddleData.appMode == "fiddle") {
+        this.store.dispatch(updateIframeLoadingStatusAction({ loading: true }));
+        let data = {
+          js: fiddleData.js,
+          css: fiddleData.css,
+          html: fiddleData.html
+          //isConsoleOn: this.mainService.isConsoleOn
+        };
+        let obj = {
+          html: data.html,
+          css: data.css,
+          js: data.js,
+          currentTheme: this.runtimeLayoutData().fiddleTheme?.data
+        };
+        this.postMessageToIframe("run", JSON.stringify(obj));
+      }
+      console.log("BBB");
     }
   }
   printFiddle() {
@@ -40762,6 +40781,7 @@ var IframePartComponent = class _IframePartComponent {
     window.addEventListener("message", this.onWindowMessageEventListener);
     this.mainService.requestRunCode.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
+        console.log("requestRunCode runFiddle() res = ", res);
         this.runFiddle(res);
       }
     });
@@ -40779,6 +40799,7 @@ var IframePartComponent = class _IframePartComponent {
   postMessageToIframe(messageType, data) {
     if (this.isIframeReady()) {
       let iframeElement = this.iframeElement.nativeElement;
+      console.log("Sending run message to confirmed iframe ...");
       iframeElement.contentWindow?.postMessage({
         type: messageType,
         data
@@ -45607,9 +45628,6 @@ var LoaderComponent = class _LoaderComponent {
   width = "";
   height = "";
   thickness = 3;
-  showLoader() {
-    this.store.dispatch(updateFiddleLoadingStatusAction({ loading: true }));
-  }
   getWrapperInlineStyle() {
     let obj = {};
     return obj;
@@ -45618,9 +45636,6 @@ var LoaderComponent = class _LoaderComponent {
     /* istanbul ignore next */
     []
   ));
-  hideLoader() {
-    this.store.dispatch(updateFiddleLoadingStatusAction({ loading: false }));
-  }
   constructor() {
   }
   ngOnInit() {
@@ -45671,7 +45686,7 @@ var LoaderComponent = class _LoaderComponent {
   }], isLoaderShow: [{ type: Input, args: [{ isSignal: true, alias: "isLoaderShow", required: false }] }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(LoaderComponent, { className: "LoaderComponent", filePath: "src/app/loader/loader.component.ts", lineNumber: 27 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(LoaderComponent, { className: "LoaderComponent", filePath: "src/app/loader/loader.component.ts", lineNumber: 25 });
 })();
 
 // src/app/services/ressources.service.ts
@@ -53049,30 +53064,31 @@ var _c132 = ["htmlCssGutter"];
 var _c142 = ["emptyArea1"];
 var _c152 = ["emptyArea2"];
 var _c162 = ["appFiddlesHistory"];
-var _c17 = (a0) => ({ filter: a0 });
-var _c18 = () => ({ isMobileView: false });
-var _c19 = () => ({ isMobileView: true });
-var _c20 = (a0, a1) => ({ off: a0, "is-dark-mode": a1 });
-var _c21 = (a0) => ({ "loading-mode": a0 });
-var _c222 = (a0, a1) => ({ "full-screen-iframe": a0, off: a1 });
-var _c232 = (a0) => ({ active: a0 });
-var _c242 = (a0, a1, a2) => ({ "no-result-mobile": a0, "no-code-mobile": a1, "is-dark-mode": a2 });
-var _c252 = (a0) => ({ "flex-basis": a0 });
-var _c26 = (a0) => ({ "hide-mobile": a0 });
-var _c27 = (a0, a1, a2) => ({ "hide-mobile": a0, fullscreen: a1, "vertical-title-mode": a2 });
-var _c28 = (a0) => ({ display: a0 });
-var _c29 = (a0) => ({ vertical: a0 });
-var _c30 = (a0) => ({ "vertical-title-mode": a0 });
-var _c31 = (a0) => ({ on: a0 });
-var _c322 = (a0, a1, a2) => ({ "hide-mobile": a0, "is-vertical-layout": a1, "is-horizontal-layout": a2 });
-var _c332 = (a0) => ({ "is-dark-mode": a0 });
-var _c34 = (a0) => ({ flex: a0 });
-var _c35 = (a0, a1, a2) => ({ "is-dark-mode": a0, "is-vertical-layout": a1, "is-horizontal-layout": a2 });
-var _c36 = (a0, a1) => ({ display: a0, opacity: a1 });
-var _c37 = (a0, a1, a2, a3, a4) => ({ "hide-mobile": a0, "layout-type-1": a1, "layout-type-2": a2, "layout-type-3": a3, "layout-type-4": a4 });
-var _c38 = (a0, a1) => ({ "mobile-mode": a0, "desktop-mode": a1 });
-var _c39 = (a0) => ({ "hide": a0 });
-var _c40 = (a0) => ({ "selected": a0 });
+var _c17 = (a0) => ({ "portfolio-mode": a0 });
+var _c18 = (a0) => ({ filter: a0 });
+var _c19 = () => ({ isMobileView: false });
+var _c20 = () => ({ isMobileView: true });
+var _c21 = (a0, a1, a2) => ({ off: a0, "is-dark-mode": a1, "portfolio-mode": a2 });
+var _c222 = (a0) => ({ "loading-mode": a0 });
+var _c232 = (a0, a1, a2) => ({ "full-screen-iframe": a0, "portfolio-mode": a1, off: a2 });
+var _c242 = (a0) => ({ active: a0 });
+var _c252 = (a0, a1, a2, a3) => ({ "portfolio-mode": a0, "no-result-mobile": a1, "no-code-mobile": a2, "is-dark-mode": a3 });
+var _c26 = (a0) => ({ "flex-basis": a0 });
+var _c27 = (a0) => ({ "hide-mobile": a0 });
+var _c28 = (a0, a1, a2) => ({ "hide-mobile": a0, fullscreen: a1, "vertical-title-mode": a2 });
+var _c29 = (a0) => ({ display: a0 });
+var _c30 = (a0) => ({ vertical: a0 });
+var _c31 = (a0) => ({ "vertical-title-mode": a0 });
+var _c322 = (a0) => ({ on: a0 });
+var _c332 = (a0, a1, a2) => ({ "hide-mobile": a0, "is-vertical-layout": a1, "is-horizontal-layout": a2 });
+var _c34 = (a0) => ({ "is-dark-mode": a0 });
+var _c35 = (a0) => ({ flex: a0 });
+var _c36 = (a0, a1, a2) => ({ "is-dark-mode": a0, "is-vertical-layout": a1, "is-horizontal-layout": a2 });
+var _c37 = (a0, a1) => ({ display: a0, opacity: a1 });
+var _c38 = (a0, a1, a2, a3, a4) => ({ "hide-mobile": a0, "layout-type-1": a1, "layout-type-2": a2, "layout-type-3": a3, "layout-type-4": a4 });
+var _c39 = (a0, a1) => ({ "mobile-mode": a0, "desktop-mode": a1 });
+var _c40 = (a0) => ({ "hide": a0 });
+var _c41 = (a0) => ({ "selected": a0 });
 function MainComponent_ng_template_0_Conditional_0_For_9_Template(rf, ctx) {
   if (rf & 1) {
     const _r5 = \u0275\u0275getCurrentView();
@@ -53088,7 +53104,7 @@ function MainComponent_ng_template_0_Conditional_0_For_9_Template(rf, ctx) {
   if (rf & 2) {
     const item_r6 = ctx.$implicit;
     const ctx_r3 = \u0275\u0275nextContext(3);
-    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(2, _c40, ctx_r3.fiddleData().pastebintextSyntax == item_r6));
+    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(2, _c41, ctx_r3.fiddleData().pastebintextSyntax == item_r6));
     \u0275\u0275advance();
     \u0275\u0275textInterpolate(item_r6);
   }
@@ -53134,9 +53150,9 @@ function MainComponent_ng_template_0_Conditional_0_Template(rf, ctx) {
   if (rf & 2) {
     const isMobileView_r7 = \u0275\u0275nextContext().isMobileView;
     const ctx_r3 = \u0275\u0275nextContext();
-    \u0275\u0275property("ngClass", \u0275\u0275pureFunction2(5, _c38, isMobileView_r7, !isMobileView_r7));
+    \u0275\u0275property("ngClass", \u0275\u0275pureFunction2(5, _c39, isMobileView_r7, !isMobileView_r7));
     \u0275\u0275advance(4);
-    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(8, _c39, !ctx_r3.showPastebinLanguages()));
+    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(8, _c40, !ctx_r3.showPastebinLanguages()));
     \u0275\u0275advance();
     \u0275\u0275twoWayProperty("ngModel", ctx_r3.pasteBinSyntaxLanguageFilter);
     \u0275\u0275property("placeholder", "Filter syntax");
@@ -53185,7 +53201,7 @@ function MainComponent_ng_template_2_Template(rf, ctx) {
   if (rf & 2) {
     const isMobileView_r10 = ctx.isMobileView;
     const ctx_r3 = \u0275\u0275nextContext();
-    \u0275\u0275property("title", "Tools")("ngClass", \u0275\u0275pureFunction2(3, _c38, isMobileView_r10, !isMobileView_r10));
+    \u0275\u0275property("title", "Tools")("ngClass", \u0275\u0275pureFunction2(3, _c39, isMobileView_r10, !isMobileView_r10));
     \u0275\u0275advance(2);
     \u0275\u0275conditional(ctx_r3.isToolsListVisible() ? 2 : -1);
   }
@@ -53344,13 +53360,13 @@ function MainComponent_Conditional_27_Conditional_7_Template(rf, ctx) {
   if (rf & 2) {
     const ctx_r3 = \u0275\u0275nextContext(2);
     \u0275\u0275advance(2);
-    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(4, _c232, ctx_r3.fiddleData().layout === 1));
+    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(4, _c242, ctx_r3.fiddleData().layout === 1));
     \u0275\u0275advance(6);
-    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(6, _c232, ctx_r3.fiddleData().layout === 2));
+    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(6, _c242, ctx_r3.fiddleData().layout === 2));
     \u0275\u0275advance(6);
-    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(8, _c232, ctx_r3.fiddleData().layout === 3));
+    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(8, _c242, ctx_r3.fiddleData().layout === 3));
     \u0275\u0275advance(6);
-    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(10, _c232, ctx_r3.fiddleData().layout === 4));
+    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(10, _c242, ctx_r3.fiddleData().layout === 4));
   }
 }
 function MainComponent_Conditional_27_Conditional_8_Template(rf, ctx) {
@@ -53521,6 +53537,16 @@ function MainComponent_Conditional_136_Template(rf, ctx) {
     \u0275\u0275textInterpolate(ctx_r3.iframeHeight());
   }
 }
+function MainComponent_Conditional_142_Template(rf, ctx) {
+  if (rf & 1) {
+    \u0275\u0275element(0, "div", 89);
+  }
+  if (rf & 2) {
+    let tmp_24_0;
+    const ctx_r3 = \u0275\u0275nextContext();
+    \u0275\u0275property("ngStyle", \u0275\u0275pureFunction1(1, _c29, ((tmp_24_0 = ctx_r3.runtimeLayoutData().guttersData) == null ? null : tmp_24_0.isIframeGutter1_dragging) || ((tmp_24_0 = ctx_r3.runtimeLayoutData().guttersData) == null ? null : tmp_24_0.isIframeGutter2_dragging) ? "block" : ctx_r3.isIframeFullScreen ? "none" : ""));
+  }
+}
 var MainComponent = class _MainComponent {
   constructor(activatedRoute, ref, destroyRef) {
     this.activatedRoute = activatedRoute;
@@ -53621,6 +53647,10 @@ var MainComponent = class _MainComponent {
   fiddleData;
   runtimeLayoutData;
   persistedFiddleData$;
+  isPortfolioMode = signal(false, ...ngDevMode ? [{ debugName: "isPortfolioMode" }] : (
+    /* istanbul ignore next */
+    []
+  ));
   isLayoutsListVisible = signal(false, ...ngDevMode ? [{ debugName: "isLayoutsListVisible" }] : (
     /* istanbul ignore next */
     []
@@ -53721,15 +53751,24 @@ var MainComponent = class _MainComponent {
       console.log("currentFiddleId = ", currentFiddleId);
       if (currentFiddleId) {
         this.mainService.currentFiddleId.set(currentFiddleId);
-        if (this.mainService.redirectAfterSaveMode) {
-          let type = this.fiddleData().appMode == "fiddle" ? "Fiddle" : "PasteBin";
-          this.notifService.showInfo(`${type} saved ! URL copied to clipboard.`);
-          this.mainService.redirectAfterSaveMode = false;
-        } else if (this.mainService.scheduledRunFiddle) {
-          this.store.dispatch(requestFiddleFromApiAction({ id: currentFiddleId }));
-        } else {
+        if (this.mainService.arbitraryHtmlIds.includes(currentFiddleId)) {
+          this.store.dispatch(updateFiddleLoadingStatusAction({
+            loading: false
+          }));
+          this.isPortfolioMode.set(currentFiddleId === "hassane-ghanmi");
           this.mainService.scheduledRunFiddle = true;
-          this.store.dispatch(requestFiddleFromApiAction({ id: currentFiddleId }));
+          this.mainService.requestRunCode.next(JSON.stringify({ arbitraryHtmlFromId: currentFiddleId }));
+        } else {
+          if (this.mainService.redirectAfterSaveMode) {
+            let type = this.fiddleData().appMode == "fiddle" ? "Fiddle" : "PasteBin";
+            this.notifService.showInfo(`${type} saved ! URL copied to clipboard.`);
+            this.mainService.redirectAfterSaveMode = false;
+          } else if (this.mainService.scheduledRunFiddle) {
+            this.store.dispatch(requestFiddleFromApiAction({ id: currentFiddleId }));
+          } else {
+            this.mainService.scheduledRunFiddle = true;
+            this.store.dispatch(requestFiddleFromApiAction({ id: currentFiddleId }));
+          }
         }
       } else {
         this.store.dispatch(updateFiddleLoadingStatusAction({
@@ -54933,7 +54972,7 @@ var MainComponent = class _MainComponent {
         return ctx.onWindowResize($event);
       }, \u0275\u0275resolveWindow);
     }
-  }, inputs: { iframeWidth: [1, "iframeWidth"], iframeHeight: [1, "iframeHeight"] }, outputs: { iframeWidth: "iframeWidthChange", iframeHeight: "iframeHeightChange" }, decls: 158, vars: 242, consts: [["pasteBinSyntaxTemplate", ""], ["toolsListTemplate", ""], ["loader", ""], ["pastebinPart", ""], ["mainContainer", ""], ["htmlMobileToggle", ""], ["cssMobileToggle", ""], ["jsMobileToggle", ""], ["resultMobileToggle", ""], ["codesPartArea", ""], ["htmlPart", ""], ["htmlCssGutter", ""], ["cssPart", ""], ["jsPart", ""], ["emptyArea1", ""], ["iframeGutter1", ""], ["iframePart", ""], ["iframeGutter2", ""], ["emptyArea2", ""], ["modalRessources", ""], ["ressources", ""], ["modalHistory", ""], ["appFiddlesHistory", ""], ["pastebinLanguagesContainer", ""], ["filterInput", ""], ["id", "main-header"], [1, "logo-title-container"], ["title", "My Fiddle", 1, "fiddle-logo", 3, "href"], [3, "ngStyle", "src"], [1, "fiddle-title"], ["type", "text", "placeholder", "Title", 1, "form-control", "fiddle-input", 3, "input", "ngModelChange", "ngModel"], [3, "ngTemplateOutlet", "ngTemplateOutletContext"], [2, "display", "flex"], [1, "app-loader", 3, "isLoaderShow"], [1, "header-btns-container"], [1, "prettify-mobile-code", "btn"], [1, "themes-btn", "btn", 3, "click", "title"], ["aria-hidden", "true", 1, "fa", "fa-sun-o"], ["aria-hidden", "true", 1, "fa", "fa-moon-o"], [1, "history-btn", "btn", 3, "click", "title"], ["aria-hidden", "true", 1, "fa", "fa-history"], [1, "paypal-btn", "btn"], ["id", "donate-button-container"], ["id", "donate-button"], ["aria-hidden", "true", 1, "fa", "fa-paypal"], [1, "share-code-btn", "btn", 3, "click"], [1, "share-code-btn", "btn"], [1, "app-mode-btn", "btn", 3, "click"], [1, "main-container", "main-container-pastebin", 3, "ngClass"], [1, "pastebin-component-container"], [1, "code-component", 3, "ngClass"], [1, "main-container", "main-container-fiddle", 3, "ngClass"], ["id", "code-parts-title-mobile"], [3, "click", "ngClass"], [1, "codespart-iframe-container", 3, "ngClass"], [1, "codespart-container", 3, "ngStyle", "ngClass"], [1, "code-component-container", "code-component-container-html", 3, "ngStyle", "ngClass"], [1, "code-part-title"], [1, "code-part-title-btns-container"], [1, "btn", "code-part-title-btn", 3, "click", "title"], ["aria-hidden", "true", 1, "fa", "fa-indent"], [1, "btn", "code-part-title-btn", 3, "click", "title", "ngStyle"], ["aria-hidden", "true", 1, "fa", "fa-bars", 3, "ngClass"], [1, "html-half-stretch-btn", "btn", "code-part-title-btn", 3, "click", "title", "ngStyle", "ngClass"], ["aria-hidden", "true", 1, "fa", "fa-arrows-v"], ["aria-hidden", "true", 1, "fa", "fa-arrows-h"], ["aria-hidden", "true", 1, "fa", "fa-arrows-h", "fa-arrows-h-vertical"], [1, "html-stretch-btn", "btn", "code-part-title-btn", 3, "click", "title", "ngStyle", "ngClass"], [1, "html-fullscreen-btn", "btn", "code-part-title-btn", 3, "click", "ngClass", "title"], ["aria-hidden", "true", 1, "fa", "fa-arrows-alt"], [1, "code-part-gutter", "gutter", 3, "mousedown", "touchstart", "ngStyle"], [1, "code-component-container", "code-component-container-css", 3, "ngStyle", "ngClass"], [1, "css-half-stretch-btn", "btn", "code-part-title-btn", 3, "click", "title", "ngStyle", "ngClass"], [1, "css-stretch-btn", "btn", "code-part-title-btn", 3, "click", "title", "ngStyle", "ngClass"], [1, "css-fullscreen-btn", "btn", "code-part-title-btn", 3, "click", "ngClass", "title"], [1, "code-component-container", "code-component-container-js", 3, "ngStyle", "ngClass"], [1, "js-half-stretch-btn", "btn", "code-part-title-btn", 3, "click", "title", "ngStyle", "ngClass"], [1, "js-stretch-btn", "btn", "code-part-title-btn", 3, "click", "title", "ngStyle", "ngClass"], [1, "js-fullscreen-btn", "btn", "code-part-title-btn", 3, "click", "ngClass", "title"], [1, "main-container-gutter", "gutter", 3, "mousedown", "touchstart", "ngStyle"], [1, "as-split-area-iframe", 2, "position", "relative", 3, "ngClass"], [1, "empty-area", "empty-area-1", 3, "ngClass", "ngStyle"], [1, "iframe-gutter", "gutter", 3, "mousedown", "touchstart", "ngClass"], [1, "as-split-gutter-icon-custom"], [1, "iframe-overlay", 3, "ngStyle"], [1, "fiddle-size", "fiddle-size-overlay"], [1, "fullscreen-iframe-header", 3, "ngStyle"], [1, "fullscreen-iframe-btn", "btn", "fullscreen-iframe-btn-secondary", 3, "click", "title"], [1, "iframe-area", 3, "ngStyle"], [1, "iframe-overlay-for-drop", 3, "ngStyle"], [3, "isConsoleOnUpdate", "ngClass"], [1, "empty-area", "empty-area-2", 3, "ngClass", "ngStyle"], [3, "validateEvent", "hasValidationBtn", "title"], [3, "hasValidationBtn", "title"], [3, "hideModal"], [1, "pastebin-languages-container", 3, "ngClass"], ["type", "button", 1, "btn", "pastebin-languages-toggle-btn", 3, "click"], [1, "pastebin-languages-wrapper", 3, "ngClass"], ["type", "text", "autofocus", "true", 1, "form-control", 3, "ngModelChange", "ngModel", "placeholder"], [1, "pastebin-languages-select"], [3, "ngClass"], [2, "flex-grow", "1", "font-size", "14px"], [1, "tools-btn", "btn", 3, "click", "title", "ngClass"], ["aria-hidden", "true", 1, "fa", "fa-bars"], [1, "tools-list"], [3, "click"], ["aria-hidden", "true", 1, "fa", "fa-file-pdf-o", 2, "margin-right", "5px"], [1, "fiddle-size"], ["type", "number", 1, "width", "form-control", 3, "ngModelChange", "min", "ngModel", "disabled", "max"], [1, "x"], ["type", "number", 1, "height", "form-control", 3, "ngModelChange", "min", "ngModel", "disabled", "max"], [1, "fullscreen-iframe-btn", "btn", 3, "click", "title"], [1, "stretch-v-iframe-btn", "btn", 3, "click", "title"], [1, "stretch-h-iframe-btn", "btn", 3, "click", "title"], [1, "prettify-mobile-code", "btn", 3, "click"], [1, "ressources-code-btn", "btn", 3, "click"], [1, "layouts-list-container", 2, "padding", "0px"], [1, "layouts-btn", "btn", 3, "click"], ["aria-hidden", "true", 1, "fa", "fa-sort-desc"], ["aria-hidden", "true", 1, "fa", "fa-sort-asc"], [1, "layouts-list"], [1, "layout-1", "layout", 3, "click", "ngClass"], [1, "layout-2", "layout", 3, "click", "ngClass"], [1, "layout-3", "layout", 3, "click", "ngClass"], [1, "layout-4", "layout", 3, "click", "ngClass"], [1, "width"], [1, "height"]], template: function MainComponent_Template(rf, ctx) {
+  }, inputs: { iframeWidth: [1, "iframeWidth"], iframeHeight: [1, "iframeHeight"] }, outputs: { iframeWidth: "iframeWidthChange", iframeHeight: "iframeHeightChange" }, decls: 158, vars: 249, consts: [["pasteBinSyntaxTemplate", ""], ["toolsListTemplate", ""], ["loader", ""], ["pastebinPart", ""], ["mainContainer", ""], ["htmlMobileToggle", ""], ["cssMobileToggle", ""], ["jsMobileToggle", ""], ["resultMobileToggle", ""], ["codesPartArea", ""], ["htmlPart", ""], ["htmlCssGutter", ""], ["cssPart", ""], ["jsPart", ""], ["emptyArea1", ""], ["iframeGutter1", ""], ["iframePart", ""], ["iframeGutter2", ""], ["emptyArea2", ""], ["modalRessources", ""], ["ressources", ""], ["modalHistory", ""], ["appFiddlesHistory", ""], ["pastebinLanguagesContainer", ""], ["filterInput", ""], ["id", "main-header", 3, "ngClass"], [1, "logo-title-container"], ["title", "My Fiddle", 1, "fiddle-logo", 3, "href"], [3, "ngStyle", "src"], [1, "fiddle-title"], ["type", "text", "placeholder", "Title", 1, "form-control", "fiddle-input", 3, "input", "ngModelChange", "ngModel"], [3, "ngTemplateOutlet", "ngTemplateOutletContext"], [2, "display", "flex"], [1, "app-loader", 3, "isLoaderShow"], [1, "header-btns-container"], [1, "prettify-mobile-code", "btn"], [1, "themes-btn", "btn", 3, "click", "title"], ["aria-hidden", "true", 1, "fa", "fa-sun-o"], ["aria-hidden", "true", 1, "fa", "fa-moon-o"], [1, "history-btn", "btn", 3, "click", "title"], ["aria-hidden", "true", 1, "fa", "fa-history"], [1, "paypal-btn", "btn"], ["id", "donate-button-container"], ["id", "donate-button"], ["aria-hidden", "true", 1, "fa", "fa-paypal"], [1, "share-code-btn", "btn", 3, "click"], [1, "share-code-btn", "btn"], [1, "app-mode-btn", "btn", 3, "click"], [1, "main-container", "main-container-pastebin", 3, "ngClass"], [1, "pastebin-component-container"], [1, "code-component", 3, "ngClass"], [1, "main-container", "main-container-fiddle", 3, "ngClass"], ["id", "code-parts-title-mobile", 3, "ngClass"], [3, "click", "ngClass"], [1, "codespart-iframe-container", 3, "ngClass"], [1, "codespart-container", 3, "ngStyle", "ngClass"], [1, "code-component-container", "code-component-container-html", 3, "ngStyle", "ngClass"], [1, "code-part-title"], [1, "code-part-title-btns-container"], [1, "btn", "code-part-title-btn", 3, "click", "title"], ["aria-hidden", "true", 1, "fa", "fa-indent"], [1, "btn", "code-part-title-btn", 3, "click", "title", "ngStyle"], ["aria-hidden", "true", 1, "fa", "fa-bars", 3, "ngClass"], [1, "html-half-stretch-btn", "btn", "code-part-title-btn", 3, "click", "title", "ngStyle", "ngClass"], ["aria-hidden", "true", 1, "fa", "fa-arrows-v"], ["aria-hidden", "true", 1, "fa", "fa-arrows-h"], ["aria-hidden", "true", 1, "fa", "fa-arrows-h", "fa-arrows-h-vertical"], [1, "html-stretch-btn", "btn", "code-part-title-btn", 3, "click", "title", "ngStyle", "ngClass"], [1, "html-fullscreen-btn", "btn", "code-part-title-btn", 3, "click", "ngClass", "title"], ["aria-hidden", "true", 1, "fa", "fa-arrows-alt"], [1, "code-part-gutter", "gutter", 3, "mousedown", "touchstart", "ngStyle"], [1, "code-component-container", "code-component-container-css", 3, "ngStyle", "ngClass"], [1, "css-half-stretch-btn", "btn", "code-part-title-btn", 3, "click", "title", "ngStyle", "ngClass"], [1, "css-stretch-btn", "btn", "code-part-title-btn", 3, "click", "title", "ngStyle", "ngClass"], [1, "css-fullscreen-btn", "btn", "code-part-title-btn", 3, "click", "ngClass", "title"], [1, "code-component-container", "code-component-container-js", 3, "ngStyle", "ngClass"], [1, "js-half-stretch-btn", "btn", "code-part-title-btn", 3, "click", "title", "ngStyle", "ngClass"], [1, "js-stretch-btn", "btn", "code-part-title-btn", 3, "click", "title", "ngStyle", "ngClass"], [1, "js-fullscreen-btn", "btn", "code-part-title-btn", 3, "click", "ngClass", "title"], [1, "main-container-gutter", "gutter", 3, "mousedown", "touchstart", "ngStyle"], [1, "as-split-area-iframe", 2, "position", "relative", 3, "ngClass"], [1, "empty-area", "empty-area-1", 3, "ngClass", "ngStyle"], [1, "iframe-gutter", "gutter", 3, "mousedown", "touchstart", "ngClass"], [1, "as-split-gutter-icon-custom"], [1, "iframe-overlay", 3, "ngStyle"], [1, "fiddle-size", "fiddle-size-overlay"], [1, "fullscreen-iframe-header", 3, "ngStyle"], [1, "fullscreen-iframe-btn", "btn", "fullscreen-iframe-btn-secondary", 3, "click", "title"], [1, "iframe-area", 3, "ngStyle"], [1, "iframe-overlay-for-drop", 3, "ngStyle"], [3, "isConsoleOnUpdate", "ngClass"], [1, "empty-area", "empty-area-2", 3, "ngClass", "ngStyle"], [3, "validateEvent", "hasValidationBtn", "title"], [3, "hasValidationBtn", "title"], [3, "hideModal"], [1, "pastebin-languages-container", 3, "ngClass"], ["type", "button", 1, "btn", "pastebin-languages-toggle-btn", 3, "click"], [1, "pastebin-languages-wrapper", 3, "ngClass"], ["type", "text", "autofocus", "true", 1, "form-control", 3, "ngModelChange", "ngModel", "placeholder"], [1, "pastebin-languages-select"], [3, "ngClass"], [2, "flex-grow", "1", "font-size", "14px"], [1, "tools-btn", "btn", 3, "click", "title", "ngClass"], ["aria-hidden", "true", 1, "fa", "fa-bars"], [1, "tools-list"], [3, "click"], ["aria-hidden", "true", 1, "fa", "fa-file-pdf-o", 2, "margin-right", "5px"], [1, "fiddle-size"], ["type", "number", 1, "width", "form-control", 3, "ngModelChange", "min", "ngModel", "disabled", "max"], [1, "x"], ["type", "number", 1, "height", "form-control", 3, "ngModelChange", "min", "ngModel", "disabled", "max"], [1, "fullscreen-iframe-btn", "btn", 3, "click", "title"], [1, "stretch-v-iframe-btn", "btn", 3, "click", "title"], [1, "stretch-h-iframe-btn", "btn", 3, "click", "title"], [1, "prettify-mobile-code", "btn", 3, "click"], [1, "ressources-code-btn", "btn", 3, "click"], [1, "layouts-list-container", 2, "padding", "0px"], [1, "layouts-btn", "btn", 3, "click"], ["aria-hidden", "true", 1, "fa", "fa-sort-desc"], ["aria-hidden", "true", 1, "fa", "fa-sort-asc"], [1, "layouts-list"], [1, "layout-1", "layout", 3, "click", "ngClass"], [1, "layout-2", "layout", 3, "click", "ngClass"], [1, "layout-3", "layout", 3, "click", "ngClass"], [1, "layout-4", "layout", 3, "click", "ngClass"], [1, "width"], [1, "height"]], template: function MainComponent_Template(rf, ctx) {
     if (rf & 1) {
       const _r1 = \u0275\u0275getCurrentView();
       \u0275\u0275template(0, MainComponent_ng_template_0_Template, 1, 1, "ng-template", null, 0, \u0275\u0275templateRefExtractor)(2, MainComponent_ng_template_2_Template, 3, 6, "ng-template", null, 1, \u0275\u0275templateRefExtractor);
@@ -55185,7 +55224,7 @@ var MainComponent = class _MainComponent {
       \u0275\u0275element(140, "i", 69);
       \u0275\u0275elementEnd()()();
       \u0275\u0275elementStart(141, "div", 88);
-      \u0275\u0275element(142, "div", 89);
+      \u0275\u0275conditionalCreate(142, MainComponent_Conditional_142_Template, 1, 3, "div", 89);
       \u0275\u0275elementStart(143, "app-iframe-part", 90, 16);
       \u0275\u0275listener("isConsoleOnUpdate", function MainComponent_Template_app_iframe_part_isConsoleOnUpdate_143_listener($event) {
         return ctx.isConsoleOnUpdate($event);
@@ -55216,34 +55255,35 @@ var MainComponent = class _MainComponent {
       \u0275\u0275elementEnd()();
     }
     if (rf & 2) {
-      let tmp_49_0;
-      let tmp_50_0;
       let tmp_51_0;
       let tmp_52_0;
       let tmp_53_0;
-      let tmp_56_0;
+      let tmp_54_0;
+      let tmp_55_0;
       let tmp_58_0;
-      let tmp_79_0;
-      let tmp_100_0;
-      let tmp_120_0;
-      let tmp_129_0;
-      let tmp_130_0;
+      let tmp_60_0;
+      let tmp_81_0;
+      let tmp_102_0;
+      let tmp_122_0;
+      let tmp_132_0;
       const pasteBinSyntaxTemplate_r17 = \u0275\u0275reference(1);
       const toolsListTemplate_r18 = \u0275\u0275reference(3);
-      \u0275\u0275advance(6);
+      \u0275\u0275advance(4);
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(117, _c17, ctx.isPortfolioMode()));
+      \u0275\u0275advance(2);
       \u0275\u0275property("href", ctx.getHomeUrl(), \u0275\u0275sanitizeUrl);
       \u0275\u0275advance();
-      \u0275\u0275property("ngStyle", \u0275\u0275pureFunction1(115, _c17, ctx.isFiddleThemeDark() ? "invert(1) brightness(0.8)" : ""))("src", "assets/logo.png", \u0275\u0275sanitizeUrl);
+      \u0275\u0275property("ngStyle", \u0275\u0275pureFunction1(119, _c18, ctx.isFiddleThemeDark() ? "invert(1) brightness(0.8)" : ""))("src", "assets/logo.png", \u0275\u0275sanitizeUrl);
       \u0275\u0275advance(2);
       \u0275\u0275twoWayProperty("ngModel", ctx.fiddleTitle);
       \u0275\u0275advance();
       \u0275\u0275conditional(ctx.fiddleData().appMode == "fiddle" ? 10 : -1);
       \u0275\u0275advance();
-      \u0275\u0275property("ngTemplateOutlet", pasteBinSyntaxTemplate_r17)("ngTemplateOutletContext", \u0275\u0275pureFunction0(117, _c18));
+      \u0275\u0275property("ngTemplateOutlet", pasteBinSyntaxTemplate_r17)("ngTemplateOutletContext", \u0275\u0275pureFunction0(121, _c19));
       \u0275\u0275advance(2);
       \u0275\u0275property("isLoaderShow", ctx.isDataLoading());
       \u0275\u0275advance(2);
-      \u0275\u0275property("ngTemplateOutlet", toolsListTemplate_r18)("ngTemplateOutletContext", \u0275\u0275pureFunction0(118, _c19));
+      \u0275\u0275property("ngTemplateOutlet", toolsListTemplate_r18)("ngTemplateOutletContext", \u0275\u0275pureFunction0(122, _c20));
       \u0275\u0275advance(2);
       \u0275\u0275conditional(ctx.fiddleData().appMode == "fiddle" ? 17 : -1);
       \u0275\u0275advance();
@@ -55261,38 +55301,40 @@ var MainComponent = class _MainComponent {
       \u0275\u0275advance(3);
       \u0275\u0275textInterpolate(ctx.fiddleData().appMode == "pastebin" ? "Fiddle" : ctx.fiddleData().appMode == "fiddle" ? "PasteBin" : "");
       \u0275\u0275advance();
-      \u0275\u0275property("ngTemplateOutlet", toolsListTemplate_r18)("ngTemplateOutletContext", \u0275\u0275pureFunction0(119, _c18));
+      \u0275\u0275property("ngTemplateOutlet", toolsListTemplate_r18)("ngTemplateOutletContext", \u0275\u0275pureFunction0(123, _c19));
       \u0275\u0275advance();
-      \u0275\u0275property("ngTemplateOutlet", pasteBinSyntaxTemplate_r17)("ngTemplateOutletContext", \u0275\u0275pureFunction0(120, _c19));
+      \u0275\u0275property("ngTemplateOutlet", pasteBinSyntaxTemplate_r17)("ngTemplateOutletContext", \u0275\u0275pureFunction0(124, _c20));
       \u0275\u0275advance();
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction2(121, _c20, ctx.fiddleData().appMode == "fiddle", ctx.isFiddleThemeDark()));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction3(125, _c21, ctx.fiddleData().appMode == "fiddle", ctx.isFiddleThemeDark(), ctx.isPortfolioMode()));
       \u0275\u0275advance(2);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(124, _c21, ctx.isApiDataLoading()));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(129, _c222, ctx.isApiDataLoading()));
       \u0275\u0275advance(2);
-      \u0275\u0275property("ngClass", "layout-type-" + ctx.fiddleData().layout)("ngClass", \u0275\u0275pureFunction2(126, _c222, ctx.isIframeFullScreen, ctx.fiddleData().appMode == "pastebin"));
+      \u0275\u0275property("ngClass", "layout-type-" + ctx.fiddleData().layout)("ngClass", \u0275\u0275pureFunction3(131, _c232, ctx.isIframeFullScreen, ctx.isPortfolioMode(), ctx.fiddleData().appMode == "pastebin"));
+      \u0275\u0275advance(2);
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(135, _c17, ctx.isPortfolioMode()));
+      \u0275\u0275advance();
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(137, _c242, (tmp_51_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_51_0.showHtmlForMobile));
       \u0275\u0275advance(3);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(129, _c232, (tmp_49_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_49_0.showHtmlForMobile));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(139, _c242, (tmp_52_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_52_0.showCssForMobile));
       \u0275\u0275advance(3);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(131, _c232, (tmp_50_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_50_0.showCssForMobile));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(141, _c242, (tmp_53_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_53_0.showJsForMobile));
       \u0275\u0275advance(3);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(133, _c232, (tmp_51_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_51_0.showJsForMobile));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(143, _c242, (tmp_54_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_54_0.showResultForMobile));
       \u0275\u0275advance(3);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(135, _c232, (tmp_52_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_52_0.showResultForMobile));
-      \u0275\u0275advance(3);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction3(137, _c242, !((tmp_53_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_53_0.showResultForMobile), !((tmp_53_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_53_0.showHtmlForMobile) && !((tmp_53_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_53_0.showCssForMobile) && !((tmp_53_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_53_0.showJsForMobile), ctx.isFiddleThemeDark()));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction4(145, _c252, ctx.isPortfolioMode(), !((tmp_55_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_55_0.showResultForMobile), !((tmp_55_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_55_0.showHtmlForMobile) && !((tmp_55_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_55_0.showCssForMobile) && !((tmp_55_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_55_0.showJsForMobile), ctx.isFiddleThemeDark()));
       \u0275\u0275attribute("data-layout", ctx.fiddleData().layout);
       \u0275\u0275advance();
-      \u0275\u0275property("ngStyle", \u0275\u0275pureFunction1(141, _c252, ctx.getLayoutInfos("codesPart")))("ngClass", \u0275\u0275pureFunction1(143, _c26, !((tmp_56_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_56_0.showHtmlForMobile) && !((tmp_56_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_56_0.showCssForMobile) && !((tmp_56_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_56_0.showJsForMobile)));
+      \u0275\u0275property("ngStyle", \u0275\u0275pureFunction1(150, _c26, ctx.getLayoutInfos("codesPart")))("ngClass", \u0275\u0275pureFunction1(152, _c27, !((tmp_58_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_58_0.showHtmlForMobile) && !((tmp_58_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_58_0.showCssForMobile) && !((tmp_58_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_58_0.showJsForMobile)));
       \u0275\u0275advance(2);
-      \u0275\u0275property("ngStyle", \u0275\u0275pureFunction1(145, _c252, ctx.getLayoutInfos("htmlPart")))("ngClass", \u0275\u0275pureFunction3(147, _c27, !((tmp_58_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_58_0.showHtmlForMobile), ctx.isHtmlFullScreen, ctx.getVerticalModeState("html")));
+      \u0275\u0275property("ngStyle", \u0275\u0275pureFunction1(154, _c26, ctx.getLayoutInfos("htmlPart")))("ngClass", \u0275\u0275pureFunction3(156, _c28, !((tmp_60_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_60_0.showHtmlForMobile), ctx.isHtmlFullScreen, ctx.getVerticalModeState("html")));
       \u0275\u0275advance(5);
       \u0275\u0275property("title", "Prettify HTML code");
       \u0275\u0275advance(3);
-      \u0275\u0275property("title", "Reset sizes")("ngStyle", \u0275\u0275pureFunction1(151, _c28, ctx.isHtmlFullScreen ? "none" : ""));
+      \u0275\u0275property("title", "Reset sizes")("ngStyle", \u0275\u0275pureFunction1(160, _c29, ctx.isHtmlFullScreen ? "none" : ""));
       \u0275\u0275advance(2);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(153, _c29, ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(162, _c30, ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4));
       \u0275\u0275advance();
-      \u0275\u0275property("title", "Stretch HTML to half")("ngStyle", \u0275\u0275pureFunction1(155, _c28, ctx.isHtmlFullScreen ? "none" : ""))("ngClass", \u0275\u0275pureFunction1(157, _c30, ctx.getVerticalModeState("html")));
+      \u0275\u0275property("title", "Stretch HTML to half")("ngStyle", \u0275\u0275pureFunction1(164, _c29, ctx.isHtmlFullScreen ? "none" : ""))("ngClass", \u0275\u0275pureFunction1(166, _c31, ctx.getVerticalModeState("html")));
       \u0275\u0275advance();
       \u0275\u0275conditional(ctx.fiddleData().layout == 1 || ctx.fiddleData().layout == 3 ? 71 : -1);
       \u0275\u0275advance();
@@ -55300,27 +55342,27 @@ var MainComponent = class _MainComponent {
       \u0275\u0275advance();
       \u0275\u0275conditional((ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4) && ctx.getVerticalModeState("html") ? 73 : -1);
       \u0275\u0275advance();
-      \u0275\u0275property("title", "Stretch HTML")("ngStyle", \u0275\u0275pureFunction1(159, _c28, ctx.isHtmlFullScreen ? "none" : ""))("ngClass", \u0275\u0275pureFunction1(161, _c30, ctx.getVerticalModeState("html")));
+      \u0275\u0275property("title", "Stretch HTML")("ngStyle", \u0275\u0275pureFunction1(168, _c29, ctx.isHtmlFullScreen ? "none" : ""))("ngClass", \u0275\u0275pureFunction1(170, _c31, ctx.getVerticalModeState("html")));
       \u0275\u0275advance();
       \u0275\u0275conditional(ctx.fiddleData().layout == 1 || ctx.fiddleData().layout == 3 ? 75 : -1);
       \u0275\u0275advance();
       \u0275\u0275conditional(ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4 ? 76 : -1);
       \u0275\u0275advance();
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(163, _c31, ctx.isHtmlFullScreen))("title", "Full screen HTML");
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(172, _c322, ctx.isHtmlFullScreen))("title", "Full screen HTML");
       \u0275\u0275advance(2);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(165, _c21, ctx.isApiDataLoading()));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(174, _c222, ctx.isApiDataLoading()));
       \u0275\u0275advance(2);
       \u0275\u0275property("ngStyle", ctx.getCodePartGutterStyle("html-css"));
       \u0275\u0275advance(2);
-      \u0275\u0275property("ngStyle", \u0275\u0275pureFunction1(167, _c252, ctx.getLayoutInfos("cssPart")))("ngClass", \u0275\u0275pureFunction3(169, _c27, !((tmp_79_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_79_0.showCssForMobile), ctx.isCssFullScreen, ctx.getVerticalModeState("css")));
+      \u0275\u0275property("ngStyle", \u0275\u0275pureFunction1(176, _c26, ctx.getLayoutInfos("cssPart")))("ngClass", \u0275\u0275pureFunction3(178, _c28, !((tmp_81_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_81_0.showCssForMobile), ctx.isCssFullScreen, ctx.getVerticalModeState("css")));
       \u0275\u0275advance(5);
       \u0275\u0275property("title", "Prettify CSS code");
       \u0275\u0275advance(3);
-      \u0275\u0275property("title", "Reset sizes")("ngStyle", \u0275\u0275pureFunction1(173, _c28, ctx.isCssFullScreen ? "none" : ""));
+      \u0275\u0275property("title", "Reset sizes")("ngStyle", \u0275\u0275pureFunction1(182, _c29, ctx.isCssFullScreen ? "none" : ""));
       \u0275\u0275advance(2);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(175, _c29, ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(184, _c30, ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4));
       \u0275\u0275advance();
-      \u0275\u0275property("title", "Stretch CSS to half")("ngStyle", \u0275\u0275pureFunction1(177, _c28, ctx.isCssFullScreen ? "none" : ""))("ngClass", \u0275\u0275pureFunction1(179, _c30, ctx.getVerticalModeState("css")));
+      \u0275\u0275property("title", "Stretch CSS to half")("ngStyle", \u0275\u0275pureFunction1(186, _c29, ctx.isCssFullScreen ? "none" : ""))("ngClass", \u0275\u0275pureFunction1(188, _c31, ctx.getVerticalModeState("css")));
       \u0275\u0275advance();
       \u0275\u0275conditional(ctx.fiddleData().layout == 1 || ctx.fiddleData().layout == 3 ? 95 : -1);
       \u0275\u0275advance();
@@ -55328,27 +55370,27 @@ var MainComponent = class _MainComponent {
       \u0275\u0275advance();
       \u0275\u0275conditional((ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4) && ctx.getVerticalModeState("css") ? 97 : -1);
       \u0275\u0275advance();
-      \u0275\u0275property("title", "Stretch CSS")("ngStyle", \u0275\u0275pureFunction1(181, _c28, ctx.isCssFullScreen ? "none" : ""))("ngClass", \u0275\u0275pureFunction1(183, _c30, ctx.getVerticalModeState("css")));
+      \u0275\u0275property("title", "Stretch CSS")("ngStyle", \u0275\u0275pureFunction1(190, _c29, ctx.isCssFullScreen ? "none" : ""))("ngClass", \u0275\u0275pureFunction1(192, _c31, ctx.getVerticalModeState("css")));
       \u0275\u0275advance();
       \u0275\u0275conditional(ctx.fiddleData().layout == 1 || ctx.fiddleData().layout == 3 ? 99 : -1);
       \u0275\u0275advance();
       \u0275\u0275conditional(ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4 ? 100 : -1);
       \u0275\u0275advance();
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(185, _c31, ctx.isCssFullScreen))("title", "Full screen CSS");
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(194, _c322, ctx.isCssFullScreen))("title", "Full screen CSS");
       \u0275\u0275advance(2);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(187, _c21, ctx.isApiDataLoading()));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(196, _c222, ctx.isApiDataLoading()));
       \u0275\u0275advance(2);
       \u0275\u0275property("ngStyle", ctx.getCodePartGutterStyle("css-js"));
       \u0275\u0275advance();
-      \u0275\u0275property("ngStyle", \u0275\u0275pureFunction1(189, _c252, ctx.getLayoutInfos("jsPart")))("ngClass", \u0275\u0275pureFunction3(191, _c27, !((tmp_100_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_100_0.showJsForMobile), ctx.isJsFullScreen, ctx.getVerticalModeState("js")));
+      \u0275\u0275property("ngStyle", \u0275\u0275pureFunction1(198, _c26, ctx.getLayoutInfos("jsPart")))("ngClass", \u0275\u0275pureFunction3(200, _c28, !((tmp_102_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_102_0.showJsForMobile), ctx.isJsFullScreen, ctx.getVerticalModeState("js")));
       \u0275\u0275advance(5);
       \u0275\u0275property("title", "Prettify JavaScript code");
       \u0275\u0275advance(3);
-      \u0275\u0275property("title", "Reset sizes")("ngStyle", \u0275\u0275pureFunction1(195, _c28, ctx.isJsFullScreen ? "none" : ""));
+      \u0275\u0275property("title", "Reset sizes")("ngStyle", \u0275\u0275pureFunction1(204, _c29, ctx.isJsFullScreen ? "none" : ""));
       \u0275\u0275advance(2);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(197, _c29, ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(206, _c30, ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4));
       \u0275\u0275advance();
-      \u0275\u0275property("title", "Stretch JS to half")("ngStyle", \u0275\u0275pureFunction1(199, _c28, ctx.isJsFullScreen ? "none" : ""))("ngClass", \u0275\u0275pureFunction1(201, _c30, ctx.getVerticalModeState("js")));
+      \u0275\u0275property("title", "Stretch JS to half")("ngStyle", \u0275\u0275pureFunction1(208, _c29, ctx.isJsFullScreen ? "none" : ""))("ngClass", \u0275\u0275pureFunction1(210, _c31, ctx.getVerticalModeState("js")));
       \u0275\u0275advance();
       \u0275\u0275conditional(ctx.fiddleData().layout == 1 || ctx.fiddleData().layout == 3 ? 118 : -1);
       \u0275\u0275advance();
@@ -55356,25 +55398,25 @@ var MainComponent = class _MainComponent {
       \u0275\u0275advance();
       \u0275\u0275conditional((ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4) && ctx.getVerticalModeState("js") ? 120 : -1);
       \u0275\u0275advance();
-      \u0275\u0275property("title", "Stretch JAVASCRIPT")("ngStyle", \u0275\u0275pureFunction1(203, _c28, ctx.isJsFullScreen ? "none" : ""))("ngClass", \u0275\u0275pureFunction1(205, _c30, ctx.getVerticalModeState("js")));
+      \u0275\u0275property("title", "Stretch JAVASCRIPT")("ngStyle", \u0275\u0275pureFunction1(212, _c29, ctx.isJsFullScreen ? "none" : ""))("ngClass", \u0275\u0275pureFunction1(214, _c31, ctx.getVerticalModeState("js")));
       \u0275\u0275advance();
       \u0275\u0275conditional(ctx.fiddleData().layout == 1 || ctx.fiddleData().layout == 3 ? 122 : -1);
       \u0275\u0275advance();
       \u0275\u0275conditional(ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4 ? 123 : -1);
       \u0275\u0275advance();
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(207, _c31, ctx.isJsFullScreen))("title", "Full screen JS");
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(216, _c322, ctx.isJsFullScreen))("title", "Full screen JS");
       \u0275\u0275advance(2);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(209, _c21, ctx.isApiDataLoading()));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(218, _c222, ctx.isApiDataLoading()));
       \u0275\u0275advance(2);
       \u0275\u0275property("ngStyle", ctx.getCodePartGutterStyle("main-container"));
       \u0275\u0275advance();
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction3(211, _c322, !((tmp_120_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_120_0.showResultForMobile), ctx.fiddleData().layout == 1 || ctx.fiddleData().layout == 3, ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction3(220, _c332, !((tmp_122_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_122_0.showResultForMobile), ctx.fiddleData().layout == 1 || ctx.fiddleData().layout == 3, ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4));
       \u0275\u0275advance();
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(215, _c332, ctx.isFiddleThemeDark()))("ngStyle", \u0275\u0275pureFunction1(217, _c34, "0 0 " + ctx.getEmptyAreaSize(1)));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(224, _c34, ctx.isFiddleThemeDark()))("ngStyle", \u0275\u0275pureFunction1(226, _c35, "0 0 " + ctx.getEmptyAreaSize(1)));
       \u0275\u0275advance(2);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction3(219, _c35, ctx.isFiddleThemeDark(), ctx.fiddleData().layout == 1 || ctx.fiddleData().layout == 3, ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction3(228, _c36, ctx.isFiddleThemeDark(), ctx.fiddleData().layout == 1 || ctx.fiddleData().layout == 3, ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4));
       \u0275\u0275advance(3);
-      \u0275\u0275property("ngStyle", \u0275\u0275pureFunction2(223, _c36, ctx.isIframeOverlayVisible() ? "" : "none", ctx.showIframeOverlayWithSizes() ? 1 : 0));
+      \u0275\u0275property("ngStyle", \u0275\u0275pureFunction2(232, _c37, ctx.isIframeOverlayVisible() ? "" : "none", ctx.showIframeOverlayWithSizes() ? 1 : 0));
       \u0275\u0275advance();
       \u0275\u0275conditional(ctx.showIframeOverlayWithSizes() ? 136 : -1);
       \u0275\u0275advance();
@@ -55384,13 +55426,13 @@ var MainComponent = class _MainComponent {
       \u0275\u0275advance(3);
       \u0275\u0275property("ngStyle", ctx.getIframeOrHeaderStyleObject("iframe"));
       \u0275\u0275advance();
-      \u0275\u0275property("ngStyle", \u0275\u0275pureFunction1(226, _c28, ((tmp_129_0 = ctx.runtimeLayoutData().guttersData) == null ? null : tmp_129_0.isIframeGutter1_dragging) || ((tmp_129_0 = ctx.runtimeLayoutData().guttersData) == null ? null : tmp_129_0.isIframeGutter2_dragging) ? "block" : ctx.isIframeFullScreen ? "none" : ""));
+      \u0275\u0275conditional(!ctx.isPortfolioMode() ? 142 : -1);
       \u0275\u0275advance();
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction5(228, _c37, !((tmp_130_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_130_0.showResultForMobile), ctx.fiddleData().layout == 1, ctx.fiddleData().layout == 2, ctx.fiddleData().layout == 3, ctx.fiddleData().layout == 4));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction5(235, _c38, !((tmp_132_0 = ctx.runtimeLayoutData().mobileLayoutData) == null ? null : tmp_132_0.showResultForMobile), ctx.fiddleData().layout == 1, ctx.fiddleData().layout == 2, ctx.fiddleData().layout == 3, ctx.fiddleData().layout == 4));
       \u0275\u0275advance(2);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction3(234, _c35, ctx.isFiddleThemeDark(), ctx.fiddleData().layout == 1 || ctx.fiddleData().layout == 3, ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction3(241, _c36, ctx.isFiddleThemeDark(), ctx.fiddleData().layout == 1 || ctx.fiddleData().layout == 3, ctx.fiddleData().layout == 2 || ctx.fiddleData().layout == 4));
       \u0275\u0275advance(3);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(238, _c332, ctx.isFiddleThemeDark()))("ngStyle", \u0275\u0275pureFunction1(240, _c34, "0 0 " + ctx.getEmptyAreaSize(2)));
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(245, _c34, ctx.isFiddleThemeDark()))("ngStyle", \u0275\u0275pureFunction1(247, _c35, "0 0 " + ctx.getEmptyAreaSize(2)));
       \u0275\u0275advance(2);
       \u0275\u0275property("hasValidationBtn", ctx.ressourcesComponent && ctx.ressourcesComponent.selectedRessourceAssets.length > 0)("title", "Fiddle ressources");
       \u0275\u0275advance(4);
@@ -55428,19 +55470,20 @@ var MainComponent = class _MainComponent {
 </ng-template>
 
 <ng-template #toolsListTemplate let-isMobileView="isMobileView">
-  <button [title]="'Tools'" class="tools-btn btn" (click)="toggleToolsList()" [ngClass]="{'mobile-mode':isMobileView, 'desktop-mode': !isMobileView}">
-      <i class="fa fa-bars" aria-hidden="true"></i>
-      @if(isToolsListVisible()){
-      <ul class="tools-list">
-        <li (click)="printFiddle()">
-          <i style="margin-right: 5px;" class="fa fa-file-pdf-o" aria-hidden="true"></i>Print fiddle
-        </li>
-      </ul>
-      }
-    </button>
+  <button [title]="'Tools'" class="tools-btn btn" (click)="toggleToolsList()"
+    [ngClass]="{'mobile-mode':isMobileView, 'desktop-mode': !isMobileView}">
+    <i class="fa fa-bars" aria-hidden="true"></i>
+    @if(isToolsListVisible()){
+    <ul class="tools-list">
+      <li (click)="printFiddle()">
+        <i style="margin-right: 5px;" class="fa fa-file-pdf-o" aria-hidden="true"></i>Print fiddle
+      </li>
+    </ul>
+    }
+  </button>
 </ng-template>
 
-<header id="main-header">
+<header id="main-header" [ngClass]="{'portfolio-mode': isPortfolioMode()}">
   <div class="logo-title-container">
     <a class="fiddle-logo" title="My Fiddle" [href]="getHomeUrl()">
       <img [ngStyle]="{ filter: isFiddleThemeDark() ? 'invert(1) brightness(0.8)' : '' }" [src]="'assets/logo.png'" />
@@ -55598,7 +55641,7 @@ var MainComponent = class _MainComponent {
 </header>
 
 <div class="main-container main-container-pastebin"
-  [ngClass]="{ off: fiddleData().appMode == 'fiddle', 'is-dark-mode': isFiddleThemeDark()}">
+  [ngClass]="{ off: fiddleData().appMode == 'fiddle', 'is-dark-mode': isFiddleThemeDark(), 'portfolio-mode': isPortfolioMode()}">
   <div class="pastebin-component-container">
     <app-pastebin #pastebinPart class="code-component" [ngClass]="{'loading-mode': isApiDataLoading()}"></app-pastebin>
   </div>
@@ -55607,9 +55650,10 @@ var MainComponent = class _MainComponent {
 <div class="main-container main-container-fiddle" [ngClass]="'layout-type-' + fiddleData().layout" #mainContainer
   [ngClass]="{
     'full-screen-iframe': isIframeFullScreen,
+    'portfolio-mode': isPortfolioMode(),
     off: fiddleData().appMode == 'pastebin'
   }">
-  <div id="code-parts-title-mobile">
+  <div id="code-parts-title-mobile" [ngClass]="{'portfolio-mode': isPortfolioMode()}">
     <a #htmlMobileToggle (click)="toggleCodePart('html')"
       [ngClass]="{ active: this.runtimeLayoutData().mobileLayoutData?.showHtmlForMobile }">HTML</a>
     <a #cssMobileToggle (click)="toggleCodePart('css')"
@@ -55621,6 +55665,7 @@ var MainComponent = class _MainComponent {
   </div>
 
   <div [attr.data-layout]="fiddleData().layout" class="codespart-iframe-container" [ngClass]="{
+      'portfolio-mode': isPortfolioMode(),
       'no-result-mobile': !this.runtimeLayoutData().mobileLayoutData?.showResultForMobile,
       'no-code-mobile': !this.runtimeLayoutData().mobileLayoutData?.showHtmlForMobile && !this.runtimeLayoutData().mobileLayoutData?.showCssForMobile && !this.runtimeLayoutData().mobileLayoutData?.showJsForMobile,
       'is-dark-mode': isFiddleThemeDark()
@@ -55835,7 +55880,8 @@ var MainComponent = class _MainComponent {
         <div class="as-split-gutter-icon-custom"></div>
       </div>
 
-      <div class="iframe-overlay" [ngStyle]="{ display: isIframeOverlayVisible() ? '' : 'none', opacity: showIframeOverlayWithSizes()? 1 : 0 }">
+      <div class="iframe-overlay"
+        [ngStyle]="{ display: isIframeOverlayVisible() ? '' : 'none', opacity: showIframeOverlayWithSizes()? 1 : 0 }">
         @if(showIframeOverlayWithSizes()){
         <div class="fiddle-size fiddle-size-overlay">
           <span class="width">{{ iframeWidth() }}</span>
@@ -55854,6 +55900,7 @@ var MainComponent = class _MainComponent {
 
       <div class="iframe-area" [ngStyle]="getIframeOrHeaderStyleObject('iframe')">
 
+        @if(!isPortfolioMode()){
         <div class="iframe-overlay-for-drop" [ngStyle]="{
             display:
               runtimeLayoutData().guttersData?.isIframeGutter1_dragging|| runtimeLayoutData().guttersData?.isIframeGutter2_dragging
@@ -55862,6 +55909,8 @@ var MainComponent = class _MainComponent {
                 ? 'none'
                 : ''
           }"></div>
+
+        }
 
         <app-iframe-part #iframePart [ngClass]="{
             'hide-mobile': !this.runtimeLayoutData().mobileLayoutData?.showResultForMobile,
@@ -56062,7 +56111,7 @@ var initialFiddleState = {
   loading: true,
   ressourcesLoading: false,
   fiddlesHistoryLoading: false,
-  iframeLoading: true
+  iframeLoading: false
 };
 var initialFiddleApiResponseState = {
   persistedFiddleData: {
