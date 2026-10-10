@@ -39830,7 +39830,7 @@ var MainService = class _MainService {
       appName: isProd ? "myfiddle" : isPreProd ? "myfiddle-preprod" : "",
       homeUrl: isProd ? "https://ghanhass.github.io/myfiddle/" : isPreProd ? "https://ghanhass.github.io/myfiddle-preprod/" : "http://localhost:4200",
       fiddleIframeOrigin: isProd || isPreProd ? "https://hassoon-github.github.io" : "http://localhost",
-      apiMode: "json-server",
+      apiMode: "gitlab-snippet",
       apiUrl: "/api/"
     };
   }
@@ -40746,11 +40746,9 @@ var IframePartComponent = class _IframePartComponent {
   };
   runFiddle(arbitraryFiddleData) {
     console.log("arbitraryFiddleData = ", arbitraryFiddleData);
-    console.log("typeof arbitraryFiddleData = ", typeof arbitraryFiddleData);
     if (typeof arbitraryFiddleData == "string") {
       let obj = JSON.parse(arbitraryFiddleData);
       if (this.mainService.arbitraryHtmlIds.includes(obj.arbitraryHtmlFromId)) {
-        console.log("AAA");
         this.postMessageToIframe("run-arbitrary-html", obj.arbitraryHtmlFromId);
       }
     } else {
@@ -40771,7 +40769,6 @@ var IframePartComponent = class _IframePartComponent {
         };
         this.postMessageToIframe("run", JSON.stringify(obj));
       }
-      console.log("BBB");
     }
   }
   printFiddle() {
@@ -40781,7 +40778,6 @@ var IframePartComponent = class _IframePartComponent {
     window.addEventListener("message", this.onWindowMessageEventListener);
     this.mainService.requestRunCode.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
-        console.log("requestRunCode runFiddle() res = ", res);
         this.runFiddle(res);
       }
     });
@@ -53716,29 +53712,28 @@ var MainComponent = class _MainComponent {
     }
     this.persistedFiddleData$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((res) => {
       if (this.mainService.isFiddleWithId(res)) {
-        setTimeout(() => {
-          if (res.isMobileMode) {
-            this.changeLayout(1);
-            let mobileLayoutArr = res.mobileLayout?.split(":");
-            let mobileCodePart = mobileLayoutArr[0];
-            let mobileResult = mobileLayoutArr[1];
-            let showHtmlForMobile = mobileCodePart === "1";
-            let showCssForMobile = mobileCodePart === "2";
-            let showJsForMobile = mobileCodePart === "3";
-            let showResultForMobile = mobileResult === "1";
-            this.store.dispatch(updateRuntimeLayoutDataAction({
-              mobileLayoutData: {
-                showHtmlForMobile,
-                showCssForMobile,
-                showJsForMobile,
-                showResultForMobile
-              }
-            }));
-          } else {
-            this.changeLayout(res.layout, res);
-          }
-          this.fiddleTitle.set(res.title);
-        }, 1);
+        console.log("entering if (this.mainService.isFiddleWithId(res))");
+        if (res.isMobileMode) {
+          this.changeLayout(1);
+          let mobileLayoutArr = res.mobileLayout?.split(":");
+          let mobileCodePart = mobileLayoutArr[0];
+          let mobileResult = mobileLayoutArr[1];
+          let showHtmlForMobile = mobileCodePart === "1";
+          let showCssForMobile = mobileCodePart === "2";
+          let showJsForMobile = mobileCodePart === "3";
+          let showResultForMobile = mobileResult === "1";
+          this.store.dispatch(updateRuntimeLayoutDataAction({
+            mobileLayoutData: {
+              showHtmlForMobile,
+              showCssForMobile,
+              showJsForMobile,
+              showResultForMobile
+            }
+          }));
+        } else {
+          this.changeLayout(res.layout, res);
+        }
+        this.fiddleTitle.set(res.title);
       }
     });
     this.IsAfterViewInitReached = true;
