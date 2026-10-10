@@ -40745,7 +40745,6 @@ var IframePartComponent = class _IframePartComponent {
     }
   };
   runFiddle(arbitraryFiddleData) {
-    console.log("arbitraryFiddleData = ", arbitraryFiddleData);
     if (typeof arbitraryFiddleData == "string") {
       let obj = JSON.parse(arbitraryFiddleData);
       if (this.mainService.arbitraryHtmlIds.includes(obj.arbitraryHtmlFromId)) {
@@ -40795,7 +40794,6 @@ var IframePartComponent = class _IframePartComponent {
   postMessageToIframe(messageType, data) {
     if (this.isIframeReady()) {
       let iframeElement = this.iframeElement.nativeElement;
-      console.log("Sending run message to confirmed iframe ...");
       iframeElement.contentWindow?.postMessage({
         type: messageType,
         data
@@ -53712,7 +53710,6 @@ var MainComponent = class _MainComponent {
     }
     this.persistedFiddleData$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((res) => {
       if (this.mainService.isFiddleWithId(res)) {
-        console.log("entering if (this.mainService.isFiddleWithId(res))");
         if (res.isMobileMode) {
           this.changeLayout(1);
           let mobileLayoutArr = res.mobileLayout?.split(":");
