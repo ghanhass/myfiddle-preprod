@@ -39830,7 +39830,7 @@ var MainService = class _MainService {
       appName: isProd ? "myfiddle" : isPreProd ? "myfiddle-preprod" : "",
       homeUrl: isProd ? "https://ghanhass.github.io/myfiddle/" : isPreProd ? "https://ghanhass.github.io/myfiddle-preprod/" : "http://localhost:4200",
       fiddleIframeOrigin: isProd || isPreProd ? "https://hassoon-github.github.io" : "http://localhost",
-      apiMode: "json-server",
+      apiMode: "gitlab-snippet",
       apiUrl: "/api/"
     };
   }
@@ -40462,7 +40462,6 @@ var MainService = class _MainService {
     }
     return obs.pipe(map((res) => {
       let resObj = __spreadValues({}, res);
-      console.log("resObj === ", resObj);
       if (res.result[0].appMode == "fiddle") {
         resObj.result[0] = __spreadProps(__spreadValues({}, resObj.result[0]), {
           pastebintext: "",
@@ -53794,7 +53793,6 @@ var MainComponent = class _MainComponent {
       isMobileMode: this.isMobileMode()
     }));
     this.activatedRoute.paramMap.subscribe((params) => {
-      console.log("params = ", params);
       let currentFiddleId = params.get("id");
       console.log("currentFiddleId = ", currentFiddleId);
       if (currentFiddleId) {
