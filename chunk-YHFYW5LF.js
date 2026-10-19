@@ -56889,14 +56889,12 @@ var FiddleEffects = class _FiddleEffects {
       return this.mainService.getFiddle(action.id).pipe(tap(() => {
         this.mainService.scheduledRunFiddle = true;
       }), map((res) => {
-        console.log("requestFiddleFromApi$ res === ", res);
         if (res.success) {
           return updateFiddleDataApiResponseAction(res.result[0]);
         } else {
           return requestFiddleApiErrorAction({ message: res.message });
         }
       }), catchError((error) => {
-        console.log("requestFiddleFromApi$ error = ", error);
         return of(requestFiddleApiErrorAction({ message: (error.error?.message || "API Error").toUpperCase() }));
       }));
     }));
