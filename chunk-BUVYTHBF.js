@@ -3,7 +3,7 @@ import {
   closeBrackets,
   closeBracketsKeymap,
   completionKeymap
-} from "./chunk-JQDR2R7M.js";
+} from "./chunk-RPLEIAR6.js";
 import {
   Annotation,
   ChangeDesc,
@@ -72,7 +72,7 @@ import {
   syntaxHighlighting,
   syntaxTree,
   tags
-} from "./chunk-JHYYLJDR.js";
+} from "./chunk-6ZKKHHXJ.js";
 import {
   __async,
   __commonJS,
@@ -42337,9 +42337,9 @@ var PastebinExtensions = [
 
 // src/app/services/main.service.ts
 var headers = new HttpHeaders();
-headers = headers.set("PRIVATE-TOKEN", window.atob("Z2xwYXQtZlNteDQ2WkhMbkZzUW5MeVoyOU9IbU02TVFwdk9qRUtkVHB2WmpCcllROC4wMS4xNzFhcmdyZzc="));
+headers = headers.set("PRIVATE-TOKEN", window.atob("Z2xwYXQtZ2NGNTVTbjdjbUFuT1ItSl9QUHh5R002TVFwdk9qRUtkVHB3ZWpWbFl3OC4wMS4xNzFsNXd5MWk="));
 headers = headers.set("Content-Type", "application/json");
-var gitlabProjectId = "52190204";
+var gitlabProjectId = "87958513";
 var MainService = class _MainService {
   constructor(http, ngZone) {
     this.http = http;
@@ -52838,7 +52838,7 @@ function updateSpacers(a, b, chunks) {
       }
     }
     if (endA > posA + 1e3 && posA < vpA.from && endA > vpA.from && posB < vpB.from && endB > vpB.from) {
-      let off = Math.min(vpA.from - posA, vpB.from - posB);
+      let off = Math.max(vpA.from - posA, vpB.from - posB);
       posA += off;
       posB += off;
       chunkI--;
@@ -54029,7 +54029,7 @@ function legacy(parser) {
   return new LanguageSupport(StreamLanguage.define(parser));
 }
 function sql(dialectName) {
-  return import("./chunk-PF4BLBZV.js").then((m) => m.sql({ dialect: m[dialectName] }));
+  return import("./chunk-UY675KIN.js").then((m) => m.sql({ dialect: m[dialectName] }));
 }
 var languages = [
   // New-style language modes
@@ -54037,7 +54037,7 @@ var languages = [
     name: "C",
     extensions: ["c", "h", "ino"],
     load() {
-      return import("./chunk-WZMDWOIL.js").then((m) => m.cpp());
+      return import("./chunk-2PBXQXCY.js").then((m) => m.cpp());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -54045,7 +54045,7 @@ var languages = [
     alias: ["cpp"],
     extensions: ["cpp", "c++", "cc", "cxx", "hpp", "h++", "hh", "hxx"],
     load() {
-      return import("./chunk-WZMDWOIL.js").then((m) => m.cpp());
+      return import("./chunk-2PBXQXCY.js").then((m) => m.cpp());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -54060,14 +54060,14 @@ var languages = [
     name: "CSS",
     extensions: ["css"],
     load() {
-      return import("./chunk-VNMPWFVP.js").then((m) => m.css());
+      return import("./chunk-R73ACDFU.js").then((m) => m.css());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "Go",
     extensions: ["go"],
     load() {
-      return import("./chunk-WX6OMX4O.js").then((m) => m.go());
+      return import("./chunk-6F7X7DNA.js").then((m) => m.go());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -54075,14 +54075,14 @@ var languages = [
     alias: ["xhtml"],
     extensions: ["html", "htm", "handlebars", "hbs"],
     load() {
-      return import("./chunk-KNVEK5ZB.js").then((m) => m.html());
+      return import("./chunk-ZIYXJAKH.js").then((m) => m.html());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "Java",
     extensions: ["java"],
     load() {
-      return import("./chunk-PJDE4MZR.js").then((m) => m.java());
+      return import("./chunk-3WXVCNDP.js").then((m) => m.java());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -54090,14 +54090,14 @@ var languages = [
     alias: ["ecmascript", "js", "node"],
     extensions: ["js", "mjs", "cjs"],
     load() {
-      return import("./chunk-HH6ZF2OH.js").then((m) => m.javascript());
+      return import("./chunk-YEGBB5L3.js").then((m) => m.javascript());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "Jinja",
     extensions: ["j2", "jinja", "jinja2"],
     load() {
-      return import("./chunk-C2H7BRP7.js").then((m) => m.jinja());
+      return import("./chunk-6XR225FZ.js").then((m) => m.jinja());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -54105,28 +54105,28 @@ var languages = [
     alias: ["json5"],
     extensions: ["json", "map"],
     load() {
-      return import("./chunk-C4HLT3NV.js").then((m) => m.json());
+      return import("./chunk-CZCNEZHX.js").then((m) => m.json());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "JSX",
     extensions: ["jsx"],
     load() {
-      return import("./chunk-HH6ZF2OH.js").then((m) => m.javascript({ jsx: true }));
+      return import("./chunk-YEGBB5L3.js").then((m) => m.javascript({ jsx: true }));
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "LESS",
     extensions: ["less"],
     load() {
-      return import("./chunk-HQWKS67Q.js").then((m) => m.less());
+      return import("./chunk-X4UPMM35.js").then((m) => m.less());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "Liquid",
     extensions: ["liquid"],
     load() {
-      return import("./chunk-Z2ZHNQO7.js").then((m) => m.liquid());
+      return import("./chunk-7JNJN4EU.js").then((m) => m.liquid());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -54139,7 +54139,7 @@ var languages = [
     name: "Markdown",
     extensions: ["md", "markdown", "mkd"],
     load() {
-      return import("./chunk-4VBXBVLU.js").then((m) => m.markdown());
+      return import("./chunk-H3Y6UIHL.js").then((m) => m.markdown());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -54158,7 +54158,7 @@ var languages = [
     name: "PHP",
     extensions: ["php", "php3", "php4", "php5", "php7", "phtml"],
     load() {
-      return import("./chunk-RXATRV2O.js").then((m) => m.php());
+      return import("./chunk-33GTI26J.js").then((m) => m.php());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -54179,28 +54179,28 @@ var languages = [
     extensions: ["BUILD", "bzl", "py", "pyw"],
     filename: /^(BUCK|BUILD)$/,
     load() {
-      return import("./chunk-EW74SHQQ.js").then((m) => m.python());
+      return import("./chunk-KKLB2SOW.js").then((m) => m.python());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "Rust",
     extensions: ["rs"],
     load() {
-      return import("./chunk-NR4NCQZW.js").then((m) => m.rust());
+      return import("./chunk-4TIZ3O37.js").then((m) => m.rust());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "Sass",
     extensions: ["sass"],
     load() {
-      return import("./chunk-KSMJMVQL.js").then((m) => m.sass({ indented: true }));
+      return import("./chunk-DJQUBCGS.js").then((m) => m.sass({ indented: true }));
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "SCSS",
     extensions: ["scss"],
     load() {
-      return import("./chunk-KSMJMVQL.js").then((m) => m.sass());
+      return import("./chunk-DJQUBCGS.js").then((m) => m.sass());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -54220,7 +54220,7 @@ var languages = [
     name: "TSX",
     extensions: ["tsx"],
     load() {
-      return import("./chunk-HH6ZF2OH.js").then((m) => m.javascript({ jsx: true, typescript: true }));
+      return import("./chunk-YEGBB5L3.js").then((m) => m.javascript({ jsx: true, typescript: true }));
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -54228,14 +54228,14 @@ var languages = [
     alias: ["ts"],
     extensions: ["ts", "mts", "cts"],
     load() {
-      return import("./chunk-HH6ZF2OH.js").then((m) => m.javascript({ typescript: true }));
+      return import("./chunk-YEGBB5L3.js").then((m) => m.javascript({ typescript: true }));
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "WebAssembly",
     extensions: ["wat", "wast"],
     load() {
-      return import("./chunk-HXG7MTP2.js").then((m) => m.wast());
+      return import("./chunk-FGUBCK5J.js").then((m) => m.wast());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -54243,7 +54243,7 @@ var languages = [
     alias: ["rss", "wsdl", "xsd"],
     extensions: ["xml", "xsl", "xsd", "svg"],
     load() {
-      return import("./chunk-YAWFPG5L.js").then((m) => m.xml());
+      return import("./chunk-H56N3X5T.js").then((m) => m.xml());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -54251,7 +54251,7 @@ var languages = [
     alias: ["yml"],
     extensions: ["yaml", "yml"],
     load() {
-      return import("./chunk-Q2GAY2KD.js").then((m) => m.yaml());
+      return import("./chunk-YH5YQZ4U.js").then((m) => m.yaml());
     }
   }),
   // Legacy modes ported from CodeMirror 5
@@ -55040,13 +55040,13 @@ var languages = [
     name: "Vue",
     extensions: ["vue"],
     load() {
-      return import("./chunk-3EHRBNLN.js").then((m) => m.vue());
+      return import("./chunk-2HUACFNK.js").then((m) => m.vue());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "Angular Template",
     load() {
-      return import("./chunk-6RUT777X.js").then((m) => m.angular());
+      return import("./chunk-74XJC6JU.js").then((m) => m.angular());
     }
   })
 ];
