@@ -42351,7 +42351,7 @@ var MainService = class _MainService {
       appName: isProd ? "myfiddle" : isPreProd ? "myfiddle-preprod" : "",
       homeUrl: isProd ? "https://ghanhass.github.io/myfiddle/" : isPreProd ? "https://ghanhass.github.io/myfiddle-preprod/" : "http://localhost:4200",
       fiddleIframeOrigin: isProd || isPreProd ? "https://hassoon-github.github.io" : "http://localhost",
-      apiMode: "json-server",
+      apiMode: "gitlab-snippet",
       apiUrl: "/api/"
     };
   }
@@ -55394,7 +55394,7 @@ var FiddlesHistoryComponent = class _FiddlesHistoryComponent {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(FiddlesHistoryComponent, [{
     type: Component,
-    args: [{ standalone: true, selector: "app-fiddles-history", changeDetection: ChangeDetectionStrategy.Eager, imports: [LoaderComponent, FormsModule, CommonModule, RouterModule], template: `<div class="history-container" [ngClass]="{'loading': isLoading()}">
+    args: [{ standalone: true, selector: "app-fiddles-history", changeDetection: ChangeDetectionStrategy.Eager, imports: [LoaderComponent, FormsModule, CommonModule, RouterModule, DatePipe], template: `<div class="history-container" [ngClass]="{'loading': isLoading()}">
   <div class="search-table">
     <input type="text" [(ngModel)]="searchText" [placeholder]="'Filter'" class="form-control" />
   </div>
