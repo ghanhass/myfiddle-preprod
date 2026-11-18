@@ -30039,6 +30039,11 @@ function runPlatformInitializers(injector) {
 function isDevMode() {
   return typeof ngDevMode === "undefined" || !!ngDevMode;
 }
+function enableProdMode() {
+  if (typeof ngDevMode === "undefined" || ngDevMode) {
+    _global["ngDevMode"] = false;
+  }
+}
 var APPLICATION_IS_STABLE_TIMEOUT = 1e4;
 var STABILITY_WARNING_THRESHOLD = APPLICATION_IS_STABLE_TIMEOUT - 1e3;
 var ChangeDetectorRef = class {
@@ -87860,7 +87865,7 @@ var MainService = class _MainService {
       }
     });
     let str = "";
-    if (this.envVars.production || this.envVars.apiMode == "gitlab-snippet") {
+    if (this.envVars.apiMode == "gitlab-snippet") {
       str = "&page=" + this.fiddlesHistoryListPage();
       let gitlabRawSnippetUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets?per_page=10` + str;
       let obs = this.http.get(gitlabRawSnippetUrl, { headers }).pipe(map((res) => {
@@ -87933,7 +87938,7 @@ var MainService = class _MainService {
         return void 0;
       }
     });
-    if (this.envVars.production || this.envVars.apiMode == "gitlab-snippet") {
+    if (this.envVars.apiMode == "gitlab-snippet") {
       let gitlabRawSnippetUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${fiddleId}/raw`;
       return this.http.get(gitlabRawSnippetUrl, { headers }).pipe(map((res2) => {
         let result;
@@ -88039,7 +88044,7 @@ var MainService = class _MainService {
       appMode: this.fiddleData().appMode
     };
     this.store.dispatch(updateFiddleLoadingStatusAction({ loading: true }));
-    if (this.envVars.production || this.envVars.apiMode == "gitlab-snippet") {
+    if (this.envVars.apiMode == "gitlab-snippet") {
       let timeStamp = (/* @__PURE__ */ new Date()).getTime();
       let body = {
         file_name: fiddleData.appMode + "_" + timeStamp,
@@ -100357,7 +100362,7 @@ var FiddlesHistoryComponent = class _FiddlesHistoryComponent {
   }
   getFiddleType(fiddle) {
     let str;
-    if (this.mainService.envVars.apiMode == "gitlab-snippet" || this.mainService.envVars.production) {
+    if (this.mainService.envVars.apiMode == "gitlab-snippet") {
       str = fiddle.file_name.indexOf("_") > -1 ? fiddle.file_name.split("_")[0] : "fiddle";
     } else {
       str = fiddle.appMode || "fiddle";
@@ -106334,5 +106339,6 @@ var appConfig = {
 
 // src/bootstrap.ts
 if (environment.production) {
+  enableProdMode();
 }
 bootstrapApplication(AppComponent, appConfig);
