@@ -45137,6 +45137,27 @@ var AppComponent = class _AppComponent {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(AppComponent, { className: "AppComponent", filePath: "src/app/app.component.ts", lineNumber: 12 });
 })();
 
+// src/environments/environment.ts
+var environment = {
+  production: true,
+  homeUrl: "https://ghanhass.github.io/myfiddle-preprod/",
+  fiddleIframeOrigin: "https://hassoon-github.github.io",
+  iframeUrl: "https://hassoon-github.github.io/myfiddlepreview",
+  appName: "myfiddle-preprod",
+  apiMode: "firebase",
+  apiUrl: "/api/",
+  firebaseConfig: {
+    apiKey: "AIzaSyDVFHvAYo1qdElxP8v1j9w9M6GO7w6ImRY",
+    authDomain: "myfiddle-preprod.firebaseapp.com",
+    databaseURL: "https://myfiddle-firebase-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "myfiddle-preprod",
+    storageBucket: "myfiddle-preprod.firebasestorage.app",
+    messagingSenderId: "858178077913",
+    appId: "1:858178077913:web:2e800be7cccd12b8522ac8",
+    measurementId: "G-B2Z6WGG7YL"
+  }
+};
+
 // node_modules/@angular/core/fesm2022/rxjs-interop.mjs
 function takeUntilDestroyed(destroyRef) {
   if (!destroyRef) {
@@ -87350,15 +87371,6 @@ var MainService = class _MainService {
     let isGithubOrigin = location.origin == "https://ghanhass.github.io";
     let isProd = isGithubOrigin && location.pathname.split("/").filter((el) => el)[0] == "myfiddle";
     let isPreProd = isGithubOrigin && location.pathname.split("/").filter((el) => el)[0] == "myfiddle-preprod";
-    this._envVars = {
-      production: isProd || isPreProd,
-      iframeUrl: isProd || isPreProd ? "https://hassoon-github.github.io/myfiddlepreview" : "http://localhost/myfiddlepreview",
-      appName: isProd ? "myfiddle" : isPreProd ? "myfiddle-preprod" : "",
-      homeUrl: isProd ? "https://ghanhass.github.io/myfiddle/" : isPreProd ? "https://ghanhass.github.io/myfiddle-preprod/" : "http://localhost:4200",
-      fiddleIframeOrigin: isProd || isPreProd ? "https://hassoon-github.github.io" : "http://localhost",
-      apiMode: "firebase",
-      apiUrl: "/api/"
-    };
   }
   http;
   store = inject2(Store);
@@ -87404,7 +87416,6 @@ var MainService = class _MainService {
     }
   };
   ctrlEnterMode = false;
-  _envVars;
   environmentInjector = inject2(EnvironmentInjector);
   /**
    *
@@ -87412,10 +87423,7 @@ var MainService = class _MainService {
    * @returns Boolean of whether fiddleData is from real backend or json-server || or whether response comes from gitllab-snippet api and an id is existant in the router url
    */
   isFiddleWithId(res) {
-    return !!res.id || (this.envVars.apiMode == "gitlab-snippet" || this.envVars.apiMode === "firebase") && !!this.currentFiddleId();
-  }
-  get envVars() {
-    return this._envVars;
+    return !!res.id || (environment.apiMode == "gitlab-snippet" || environment.apiMode === "firebase") && !!this.currentFiddleId();
   }
   copyTextToClipBoard(text) {
     return __async(this, null, function* () {
@@ -87865,7 +87873,7 @@ var MainService = class _MainService {
       }
     });
     let str = "";
-    if (this.envVars.apiMode == "gitlab-snippet") {
+    if (environment.apiMode == "gitlab-snippet") {
       str = "&page=" + this.fiddlesHistoryListPage();
       let gitlabRawSnippetUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets?per_page=10` + str;
       let obs = this.http.get(gitlabRawSnippetUrl, { headers }).pipe(map((res) => {
@@ -87883,7 +87891,7 @@ var MainService = class _MainService {
       }));
       return obs;
     } else {
-      if (this.envVars.apiMode == "firebase") {
+      if (environment.apiMode == "firebase") {
         let res = from(getAllFromFirebase());
         return res.pipe(map((items) => {
           console.log("getFiddlesList items = ", items);
@@ -87901,7 +87909,7 @@ var MainService = class _MainService {
             };
           }
         }));
-      } else if (this.envVars.apiMode == "json-server") {
+      } else if (environment.apiMode == "json-server") {
         str = "&_sort=-createdAt";
         str += "&_page=" + this.fiddlesHistoryListPage();
         return this.http.get("http://localhost:3000/gists?_per_page=10" + str).pipe(map((res) => {
@@ -87938,7 +87946,7 @@ var MainService = class _MainService {
         return void 0;
       }
     });
-    if (this.envVars.apiMode == "gitlab-snippet") {
+    if (environment.apiMode == "gitlab-snippet") {
       let gitlabRawSnippetUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${fiddleId}/raw`;
       return this.http.get(gitlabRawSnippetUrl, { headers }).pipe(map((res2) => {
         let result;
@@ -87958,7 +87966,7 @@ var MainService = class _MainService {
         return result;
       }));
     } else {
-      if (this.envVars.apiMode == "firebase") {
+      if (environment.apiMode == "firebase") {
         let res = from(getByIdFromFirebase(fiddleId));
         return res.pipe(map((value) => {
           console.log("getByIdFromFirebase value = ", value);
@@ -87976,7 +87984,7 @@ var MainService = class _MainService {
             };
           }
         }));
-      } else if (this.envVars.apiMode == "json-server") {
+      } else if (environment.apiMode == "json-server") {
         return this.http.get("http://localhost:3000/gists/" + fiddleId).pipe(map((value) => {
           if (value) {
             return {
@@ -88044,7 +88052,7 @@ var MainService = class _MainService {
       appMode: this.fiddleData().appMode
     };
     this.store.dispatch(updateFiddleLoadingStatusAction({ loading: true }));
-    if (this.envVars.apiMode == "gitlab-snippet") {
+    if (environment.apiMode == "gitlab-snippet") {
       let timeStamp = (/* @__PURE__ */ new Date()).getTime();
       let body = {
         file_name: fiddleData.appMode + "_" + timeStamp,
@@ -88067,7 +88075,7 @@ var MainService = class _MainService {
         });
       }));
     } else {
-      if (this.envVars.apiMode == "firebase") {
+      if (environment.apiMode == "firebase") {
         return from(addDoc2(this.fiddlesCollection, fiddleData)).pipe(map((documentReference) => {
           console.log("cloud fireStore documentReference = ", documentReference);
           return {
@@ -88083,7 +88091,7 @@ var MainService = class _MainService {
             success: false
           });
         }));
-      } else if (this.envVars.apiMode == "json-server") {
+      } else if (environment.apiMode == "json-server") {
         return this.http.post("http://localhost:3000/gists", fiddleData).pipe(map((res) => {
           return {
             result: [res],
@@ -88286,7 +88294,7 @@ var IframePartComponent = class _IframePartComponent {
     this.notifService = notifService;
     this.sanitizer = sanitizer;
     this.persistedFiddleData$ = this.store.select(selectPersistedFiddleData);
-    this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.mainService.envVars.iframeUrl);
+    this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(environment.iframeUrl);
   }
   router;
   notifService;
@@ -88297,7 +88305,7 @@ var IframePartComponent = class _IframePartComponent {
   isConsoleOnUpdate = new EventEmitter();
   mainService = inject2(MainService);
   destroyRef = inject2(DestroyRef);
-  iframeOrigin = this.mainService.envVars.fiddleIframeOrigin;
+  iframeOrigin = environment.fiddleIframeOrigin;
   safeUrl;
   store = inject2(Store);
   persistedFiddleData$;
@@ -88383,7 +88391,7 @@ var IframePartComponent = class _IframePartComponent {
       iframeElement.contentWindow?.postMessage({
         type: messageType,
         data
-      }, this.mainService.envVars.fiddleIframeOrigin);
+      }, environment.fiddleIframeOrigin);
     }
   }
   ngOnDestroy() {
@@ -88435,7 +88443,7 @@ var IframePartComponent = class _IframePartComponent {
   }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(IframePartComponent, { className: "IframePartComponent", filePath: "src/app/iframe-part/iframe-part.component.ts", lineNumber: 36 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(IframePartComponent, { className: "IframePartComponent", filePath: "src/app/iframe-part/iframe-part.component.ts", lineNumber: 37 });
 })();
 
 // node_modules/@angular/forms/fesm2022/forms.mjs
@@ -100311,7 +100319,7 @@ var FiddlesHistoryComponent = class _FiddlesHistoryComponent {
   historyLoader = new LoaderComponent();
   hideModal = output();
   getFiddleDate(fiddle) {
-    return this.mainService.envVars.apiMode == "gitlab-snippet" ? fiddle.created_at : fiddle.createdAt;
+    return environment.apiMode == "gitlab-snippet" ? fiddle.created_at : fiddle.createdAt;
   }
   goToFiddle(fiddle) {
     let id = fiddle.id;
@@ -100362,7 +100370,7 @@ var FiddlesHistoryComponent = class _FiddlesHistoryComponent {
   }
   getFiddleType(fiddle) {
     let str;
-    if (this.mainService.envVars.apiMode == "gitlab-snippet") {
+    if (environment.apiMode == "gitlab-snippet") {
       str = fiddle.file_name.indexOf("_") > -1 ? fiddle.file_name.split("_")[0] : "fiddle";
     } else {
       str = fiddle.appMode || "fiddle";
@@ -100553,7 +100561,7 @@ var FiddlesHistoryComponent = class _FiddlesHistoryComponent {
   }], hideModal: [{ type: Output, args: ["hideModal"] }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(FiddlesHistoryComponent, { className: "FiddlesHistoryComponent", filePath: "src/app/fiddles-history/fiddles-history.component.ts", lineNumber: 33 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(FiddlesHistoryComponent, { className: "FiddlesHistoryComponent", filePath: "src/app/fiddles-history/fiddles-history.component.ts", lineNumber: 34 });
 })();
 
 // src/app/pastebin/pastebin.component.ts
@@ -102562,7 +102570,7 @@ var MainComponent = class _MainComponent {
     }));
   }
   getHomeUrl() {
-    return this.mainService.envVars.homeUrl;
+    return environment.homeUrl;
   }
   prettifyMobileCode() {
     if (this.runtimeLayoutData().mobileLayoutData?.showHtmlForMobile) {
@@ -103689,7 +103697,7 @@ var MainComponent = class _MainComponent {
   }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(MainComponent, { className: "MainComponent", filePath: "src/app/main/main.component.ts", lineNumber: 37 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(MainComponent, { className: "MainComponent", filePath: "src/app/main/main.component.ts", lineNumber: 38 });
 })();
 
 // src/app/store/fiddle.reducers.ts
@@ -104547,7 +104555,7 @@ var FiddleEffects = class _FiddleEffects {
   requestSavingFiddle$ = createEffect(() => {
     return this.actions$.pipe(ofType(requestSavingFiddle), switchMap((actionprops) => {
       return this.mainService.saveFiddle().pipe(tap((res) => {
-        let appName = this.mainService.envVars.appName;
+        let appName = environment.appName;
         let hrefValue = window.location.origin;
         if (hrefValue[hrefValue.length - 1] != "/") {
           hrefValue = hrefValue + "/";
@@ -105536,25 +105544,6 @@ var StoreDevtoolsModule = class _StoreDevtoolsModule {
   }], null, null);
 })();
 
-// src/environments/environment.ts
-var environment = {
-  production: true,
-  url: "https://hassoon-github.github.io/myfiddlepreview",
-  appName: "myfiddle",
-  homeUrl: "https://ghanhass.github.io/myfiddle/",
-  fiddleIframeOrigin: "https://hassoon-github.github.io",
-  firebase: {
-    apiKey: "AIzaSyDVFHvAYo1qdElxP8v1j9w9M6GO7w6ImRY",
-    authDomain: "myfiddle-preprod.firebaseapp.com",
-    databaseURL: "https://myfiddle-firebase-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "myfiddle-preprod",
-    storageBucket: "myfiddle-preprod.firebasestorage.app",
-    messagingSenderId: "858178077913",
-    appId: "1:858178077913:web:2e800be7cccd12b8522ac8",
-    measurementId: "G-B2Z6WGG7YL"
-  }
-};
-
 // node_modules/@firebase/functions/dist/esm/index.esm.js
 var LONG_TYPE = "type.googleapis.com/google.protobuf.Int64Value";
 var UNSIGNED_LONG_TYPE = "type.googleapis.com/google.protobuf.UInt64Value";
@@ -106330,7 +106319,7 @@ var appConfig = {
       trace: false,
       traceLimit: 75
     }),
-    provideFirebaseApp(() => initializeApp2(environment.firebase)),
+    provideFirebaseApp(() => initializeApp2(environment.firebaseConfig)),
     provideAuth(() => getAuth2()),
     provideFirestore(() => getFirestore2()),
     provideFunctions(() => getFunctions2())
