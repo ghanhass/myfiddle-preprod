@@ -1,13 +1,13 @@
 import {
   html,
   htmlCompletionSource
-} from "./chunk-AOMOGT2E.js";
-import "./chunk-PAZYTTAZ.js";
-import "./chunk-YYQWNXVC.js";
+} from "./chunk-VZPZBF7M.js";
+import "./chunk-SNFIUQWE.js";
+import "./chunk-75PGF7BR.js";
 import {
   CompletionContext
-} from "./chunk-GVVXAS2P.js";
-import "./chunk-VMVK4RYA.js";
+} from "./chunk-WZCG6PDI.js";
+import "./chunk-DKD5AORT.js";
 import {
   EditorSelection,
   EditorState,
@@ -36,7 +36,7 @@ import {
   styleTags,
   syntaxTree,
   tags
-} from "./chunk-SRS666SR.js";
+} from "./chunk-CLU7NBVW.js";
 import "./chunk-W4XONAYD.js";
 
 // node_modules/@lezer/markdown/dist/index.js

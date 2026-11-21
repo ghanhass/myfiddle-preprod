@@ -2,13 +2,13 @@ import {
   completeFromList,
   ifNotIn,
   snippetCompletion
-} from "./chunk-GVVXAS2P.js";
+} from "./chunk-WZCG6PDI.js";
 import {
   ContextTracker,
   ExternalTokenizer,
   LRParser,
   LocalTokenGroup
-} from "./chunk-VMVK4RYA.js";
+} from "./chunk-DKD5AORT.js";
 import {
   IterMode,
   LRLanguage,
@@ -23,7 +23,7 @@ import {
   styleTags,
   syntaxTree,
   tags
-} from "./chunk-SRS666SR.js";
+} from "./chunk-CLU7NBVW.js";
 import "./chunk-W4XONAYD.js";
 
 // node_modules/@lezer/go/dist/index.js

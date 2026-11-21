@@ -2,7 +2,7 @@ import {
   ContextTracker,
   ExternalTokenizer,
   LRParser
-} from "./chunk-VMVK4RYA.js";
+} from "./chunk-DKD5AORT.js";
 import {
   EditorSelection,
   EditorView,
@@ -14,7 +14,7 @@ import {
   styleTags,
   syntaxTree,
   tags
-} from "./chunk-SRS666SR.js";
+} from "./chunk-CLU7NBVW.js";
 import "./chunk-W4XONAYD.js";
 
 // node_modules/@lezer/xml/dist/index.js

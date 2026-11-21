@@ -3,7 +3,7 @@ import {
   closeBrackets,
   closeBracketsKeymap,
   completionKeymap
-} from "./chunk-GVVXAS2P.js";
+} from "./chunk-WZCG6PDI.js";
 import {
   Annotation,
   ChangeDesc,
@@ -72,7 +72,7 @@ import {
   syntaxHighlighting,
   syntaxTree,
   tags
-} from "./chunk-SRS666SR.js";
+} from "./chunk-CLU7NBVW.js";
 import {
   __async,
   __commonJS,
@@ -98964,7 +98964,7 @@ function legacy(parser) {
   return new LanguageSupport(StreamLanguage.define(parser));
 }
 function sql(dialectName) {
-  return import("./chunk-NLD7UQHO.js").then((m2) => m2.sql({ dialect: m2[dialectName] }));
+  return import("./chunk-GFABLULM.js").then((m2) => m2.sql({ dialect: m2[dialectName] }));
 }
 var languages = [
   // New-style language modes
@@ -98972,7 +98972,7 @@ var languages = [
     name: "C",
     extensions: ["c", "h", "ino"],
     load() {
-      return import("./chunk-M6KFG5CP.js").then((m2) => m2.cpp());
+      return import("./chunk-XRRB3NUF.js").then((m2) => m2.cpp());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -98980,7 +98980,7 @@ var languages = [
     alias: ["cpp"],
     extensions: ["cpp", "c++", "cc", "cxx", "hpp", "h++", "hh", "hxx"],
     load() {
-      return import("./chunk-M6KFG5CP.js").then((m2) => m2.cpp());
+      return import("./chunk-XRRB3NUF.js").then((m2) => m2.cpp());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -98995,14 +98995,14 @@ var languages = [
     name: "CSS",
     extensions: ["css"],
     load() {
-      return import("./chunk-IBLTPTZ5.js").then((m2) => m2.css());
+      return import("./chunk-IROISSGJ.js").then((m2) => m2.css());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "Go",
     extensions: ["go"],
     load() {
-      return import("./chunk-PNGV4IM3.js").then((m2) => m2.go());
+      return import("./chunk-2GIPBVBW.js").then((m2) => m2.go());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -99010,14 +99010,14 @@ var languages = [
     alias: ["xhtml"],
     extensions: ["html", "htm", "handlebars", "hbs"],
     load() {
-      return import("./chunk-UACYCUMH.js").then((m2) => m2.html());
+      return import("./chunk-67U2QQLP.js").then((m2) => m2.html());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "Java",
     extensions: ["java"],
     load() {
-      return import("./chunk-7L3V6QVO.js").then((m2) => m2.java());
+      return import("./chunk-GQ3ZXVKE.js").then((m2) => m2.java());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -99025,14 +99025,14 @@ var languages = [
     alias: ["ecmascript", "js", "node"],
     extensions: ["js", "mjs", "cjs"],
     load() {
-      return import("./chunk-X6K6COEY.js").then((m2) => m2.javascript());
+      return import("./chunk-AUN64D3R.js").then((m2) => m2.javascript());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "Jinja",
     extensions: ["j2", "jinja", "jinja2"],
     load() {
-      return import("./chunk-EJEQ4J3M.js").then((m2) => m2.jinja());
+      return import("./chunk-E33HO4H7.js").then((m2) => m2.jinja());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -99040,28 +99040,28 @@ var languages = [
     alias: ["json5"],
     extensions: ["json", "map"],
     load() {
-      return import("./chunk-2O6NO2MW.js").then((m2) => m2.json());
+      return import("./chunk-T2RLCXYL.js").then((m2) => m2.json());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "JSX",
     extensions: ["jsx"],
     load() {
-      return import("./chunk-X6K6COEY.js").then((m2) => m2.javascript({ jsx: true }));
+      return import("./chunk-AUN64D3R.js").then((m2) => m2.javascript({ jsx: true }));
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "LESS",
     extensions: ["less"],
     load() {
-      return import("./chunk-QNA6JI4F.js").then((m2) => m2.less());
+      return import("./chunk-6YPLTY46.js").then((m2) => m2.less());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "Liquid",
     extensions: ["liquid"],
     load() {
-      return import("./chunk-DMAIUYIJ.js").then((m2) => m2.liquid());
+      return import("./chunk-A5PNZQNV.js").then((m2) => m2.liquid());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -99074,7 +99074,7 @@ var languages = [
     name: "Markdown",
     extensions: ["md", "markdown", "mkd"],
     load() {
-      return import("./chunk-G5MUHBQM.js").then((m2) => m2.markdown());
+      return import("./chunk-6BCENLWU.js").then((m2) => m2.markdown());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -99093,7 +99093,7 @@ var languages = [
     name: "PHP",
     extensions: ["php", "php3", "php4", "php5", "php7", "phtml"],
     load() {
-      return import("./chunk-2HLZBQ4U.js").then((m2) => m2.php());
+      return import("./chunk-ZWNH7EH3.js").then((m2) => m2.php());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -99114,28 +99114,28 @@ var languages = [
     extensions: ["BUILD", "bzl", "py", "pyw"],
     filename: /^(BUCK|BUILD)$/,
     load() {
-      return import("./chunk-WREWU44L.js").then((m2) => m2.python());
+      return import("./chunk-FOI2MJKX.js").then((m2) => m2.python());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "Rust",
     extensions: ["rs"],
     load() {
-      return import("./chunk-GC3T73QW.js").then((m2) => m2.rust());
+      return import("./chunk-UP7AURKE.js").then((m2) => m2.rust());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "Sass",
     extensions: ["sass"],
     load() {
-      return import("./chunk-EL2QGC6U.js").then((m2) => m2.sass({ indented: true }));
+      return import("./chunk-J4UUKPTD.js").then((m2) => m2.sass({ indented: true }));
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "SCSS",
     extensions: ["scss"],
     load() {
-      return import("./chunk-EL2QGC6U.js").then((m2) => m2.sass());
+      return import("./chunk-J4UUKPTD.js").then((m2) => m2.sass());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -99155,7 +99155,7 @@ var languages = [
     name: "TSX",
     extensions: ["tsx"],
     load() {
-      return import("./chunk-X6K6COEY.js").then((m2) => m2.javascript({ jsx: true, typescript: true }));
+      return import("./chunk-AUN64D3R.js").then((m2) => m2.javascript({ jsx: true, typescript: true }));
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -99163,14 +99163,14 @@ var languages = [
     alias: ["ts"],
     extensions: ["ts", "mts", "cts"],
     load() {
-      return import("./chunk-X6K6COEY.js").then((m2) => m2.javascript({ typescript: true }));
+      return import("./chunk-AUN64D3R.js").then((m2) => m2.javascript({ typescript: true }));
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "WebAssembly",
     extensions: ["wat", "wast"],
     load() {
-      return import("./chunk-FVYJXFYR.js").then((m2) => m2.wast());
+      return import("./chunk-236XP2AH.js").then((m2) => m2.wast());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -99178,7 +99178,7 @@ var languages = [
     alias: ["rss", "wsdl", "xsd"],
     extensions: ["xml", "xsl", "xsd", "svg"],
     load() {
-      return import("./chunk-EIGLN4T2.js").then((m2) => m2.xml());
+      return import("./chunk-H27SZCWH.js").then((m2) => m2.xml());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
@@ -99186,7 +99186,7 @@ var languages = [
     alias: ["yml"],
     extensions: ["yaml", "yml"],
     load() {
-      return import("./chunk-U4K7SZRD.js").then((m2) => m2.yaml());
+      return import("./chunk-NQNC5D3F.js").then((m2) => m2.yaml());
     }
   }),
   // Legacy modes ported from CodeMirror 5
@@ -99975,13 +99975,13 @@ var languages = [
     name: "Vue",
     extensions: ["vue"],
     load() {
-      return import("./chunk-7FNOHTXZ.js").then((m2) => m2.vue());
+      return import("./chunk-ZPJTTDMS.js").then((m2) => m2.vue());
     }
   }),
   /* @__PURE__ */ LanguageDescription.of({
     name: "Angular Template",
     load() {
-      return import("./chunk-6ZYQW66T.js").then((m2) => m2.angular());
+      return import("./chunk-SDE3DIPV.js").then((m2) => m2.angular());
     }
   })
 ];

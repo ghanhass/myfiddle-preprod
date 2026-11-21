@@ -16154,7 +16154,7 @@ var TreeFragment = class _TreeFragment {
           let cut = nextF;
           if (pos >= cut.from || nextPos <= cut.to || off) {
             let fFrom = Math.max(cut.from, pos) - off, fTo = Math.min(cut.to, nextPos) - off;
-            cut = fFrom >= fTo ? null : new _TreeFragment(fFrom, fTo, cut.tree, cut.offset + off, cI > 0, !!nextC);
+            cut = fFrom >= fTo ? null : new _TreeFragment(fFrom, fTo, cut.tree, cut.offset + off, cut.openStart || cI > 0, cut.openEnd || !!nextC);
           }
           if (cut)
             result.push(cut);
@@ -16248,6 +16248,14 @@ var ActiveOverlay = class {
   }
 };
 var stoppedInner = new NodeProp({ perNode: true });
+var InnerScan = class {
+  constructor(fragments, cursor) {
+    this.cursor = cursor;
+    this.overlay = null;
+    this.covered = null;
+    this.fragmentCursor = new FragmentCursor(fragments);
+  }
+};
 var MixedParse = class {
   constructor(base2, nest, input, fragments, ranges) {
     this.nest = nest;
@@ -16257,6 +16265,7 @@ var MixedParse = class {
     this.inner = [];
     this.innerDone = 0;
     this.baseTree = null;
+    this.scan = null;
     this.stoppedAt = null;
     this.baseParse = base2;
   }
@@ -16267,7 +16276,12 @@ var MixedParse = class {
         return null;
       this.baseParse = null;
       this.baseTree = done2;
-      this.startInner();
+      this.scan = new InnerScan(this.fragments, new TreeCursor(new TreeNode(done2, this.ranges[0].from, 0, null), IterMode.IncludeAnonymous | IterMode.IgnoreMounts));
+    }
+    if (this.scan) {
+      if (!this.scanInner())
+        return null;
+      this.scan = null;
       if (this.stoppedAt != null)
         for (let inner2 of this.inner)
           inner2.parse.stopAt(this.stoppedAt);
@@ -16291,6 +16305,11 @@ var MixedParse = class {
     if (this.baseParse)
       return 0;
     let pos = this.input.length;
+    if (this.scan) {
+      pos = this.scan.cursor.from;
+      for (let o = this.scan.overlay; o; o = o.prev)
+        pos = Math.min(pos, o.start);
+    }
     for (let i2 = this.innerDone; i2 < this.inner.length; i2++) {
       if (this.inner[i2].from < pos)
         pos = Math.min(pos, this.inner[i2].parse.parsedPos);
@@ -16305,12 +16324,19 @@ var MixedParse = class {
       for (let i2 = this.innerDone; i2 < this.inner.length; i2++)
         this.inner[i2].parse.stopAt(pos);
   }
-  startInner() {
-    let fragmentCursor = new FragmentCursor(this.fragments);
-    let overlay = null;
-    let covered = null;
-    let cursor = new TreeCursor(new TreeNode(this.baseTree, this.ranges[0].from, 0, null), IterMode.IncludeAnonymous | IterMode.IgnoreMounts);
-    scan: for (let nest, isCovered; ; ) {
+  // Continue the walk that finds nested regions. Returns true when
+  // it's done, false when it stopped to let advance() return.
+  scanInner() {
+    let scan = this.scan, { fragmentCursor, cursor } = scan;
+    let { overlay, covered } = scan;
+    let work = 0;
+    walk: for (let nest, isCovered; ; ) {
+      if (work >= 2e3) {
+        scan.overlay = overlay;
+        scan.covered = covered;
+        return false;
+      }
+      work++;
       let enter = true, range;
       if (this.stoppedAt != null && cursor.from >= this.stoppedAt) {
         enter = false;
@@ -16340,8 +16366,10 @@ var MixedParse = class {
           overlay = new ActiveOverlay(nest.parser, nest.overlay, oldMounts, this.inner.length, cursor.from, !!nest.bracketed, cursor.tree, overlay);
         } else {
           let ranges = punchRanges(this.ranges, nest.overlay || (cursor.from < cursor.to ? [new Range2(cursor.from, cursor.to)] : []));
-          if (ranges.length)
+          if (ranges.length) {
             checkRanges(ranges);
+            work += 20;
+          }
           if (ranges.length || !nest.overlay)
             this.inner.push(new InnerParse(nest.parser, ranges.length ? nest.parser.startParse(this.input, enterFragments(oldMounts, ranges), ranges) : nest.parser.startParse(""), nest.overlay ? nest.overlay.map((r) => new Range2(r.from - cursor.from, r.to - cursor.from)) : null, !!nest.bracketed, cursor.tree, ranges.length ? ranges[0].from : cursor.from));
           if (!nest.overlay)
@@ -16370,11 +16398,12 @@ var MixedParse = class {
           if (cursor.nextSibling())
             break;
           if (!cursor.parent())
-            break scan;
+            break walk;
           if (overlay && !--overlay.depth) {
             let ranges = punchRanges(this.ranges, overlay.ranges);
             if (ranges.length) {
               checkRanges(ranges);
+              work += 20;
               this.inner.splice(overlay.index, 0, new InnerParse(overlay.parser, overlay.parser.startParse(this.input, enterFragments(overlay.mounts, ranges), ranges), overlay.ranges.map((r) => new Range2(r.from - overlay.start, r.to - overlay.start)), overlay.bracketed, overlay.target, ranges[0].from));
             }
             overlay = overlay.prev;
@@ -16384,6 +16413,7 @@ var MixedParse = class {
         }
       }
     }
+    return true;
   }
 };
 function checkCover(covered, from, to) {

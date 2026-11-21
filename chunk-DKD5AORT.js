@@ -6,7 +6,7 @@ import {
   NodeType,
   Parser,
   Tree
-} from "./chunk-SRS666SR.js";
+} from "./chunk-CLU7NBVW.js";
 
 // node_modules/@lezer/lr/dist/index.js
 var Stack = class _Stack {

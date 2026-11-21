@@ -1,11 +1,11 @@
 import {
   defineCSSCompletionSource
-} from "./chunk-PAZYTTAZ.js";
+} from "./chunk-SNFIUQWE.js";
 import {
   ContextTracker,
   ExternalTokenizer,
   LRParser
-} from "./chunk-VMVK4RYA.js";
+} from "./chunk-DKD5AORT.js";
 import {
   LRLanguage,
   LanguageSupport,
@@ -15,7 +15,7 @@ import {
   indentNodeProp,
   styleTags,
   tags
-} from "./chunk-SRS666SR.js";
+} from "./chunk-CLU7NBVW.js";
 import "./chunk-W4XONAYD.js";
 
 // node_modules/@lezer/sass/dist/index.js

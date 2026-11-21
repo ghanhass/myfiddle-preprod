@@ -1,13 +1,13 @@
 import {
   html
-} from "./chunk-AOMOGT2E.js";
-import "./chunk-PAZYTTAZ.js";
-import "./chunk-YYQWNXVC.js";
-import "./chunk-GVVXAS2P.js";
+} from "./chunk-VZPZBF7M.js";
+import "./chunk-SNFIUQWE.js";
+import "./chunk-75PGF7BR.js";
+import "./chunk-WZCG6PDI.js";
 import {
   ExternalTokenizer,
   LRParser
-} from "./chunk-VMVK4RYA.js";
+} from "./chunk-DKD5AORT.js";
 import {
   LRLanguage,
   LanguageSupport,
@@ -19,7 +19,7 @@ import {
   parseMixed,
   styleTags,
   tags
-} from "./chunk-SRS666SR.js";
+} from "./chunk-CLU7NBVW.js";
 import "./chunk-W4XONAYD.js";
 
 // node_modules/@lezer/php/dist/index.js

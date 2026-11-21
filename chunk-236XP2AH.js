@@ -1,6 +1,6 @@
 import {
   LRParser
-} from "./chunk-VMVK4RYA.js";
+} from "./chunk-DKD5AORT.js";
 import {
   LRLanguage,
   LanguageSupport,
@@ -10,7 +10,7 @@ import {
   indentNodeProp,
   styleTags,
   tags
-} from "./chunk-SRS666SR.js";
+} from "./chunk-CLU7NBVW.js";
 import "./chunk-W4XONAYD.js";
 
 // node_modules/@codemirror/lang-wast/dist/index.js
