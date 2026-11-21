@@ -101622,7 +101622,7 @@ var MainComponent = class _MainComponent {
   }
   openFullPreviewPage() {
     let aEl = document.createElement("a");
-    aEl.href = location.origin + "/full/" + this.fiddleData().id;
+    aEl.href = location.origin + "/" + environment.appName + "/full/" + this.fiddleData().id;
     aEl.target = "_blank";
     aEl.click();
     aEl.remove();
