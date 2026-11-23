@@ -13876,10 +13876,10 @@ function hasInSkipHydrationBlockFlag(tNode) {
   return (tNode.flags & 128) === 128;
 }
 var ChangeDetectionStrategy;
-(function(ChangeDetectionStrategy3) {
-  ChangeDetectionStrategy3[ChangeDetectionStrategy3["OnPush"] = 0] = "OnPush";
-  ChangeDetectionStrategy3[ChangeDetectionStrategy3["Eager"] = 1] = "Eager";
-  ChangeDetectionStrategy3[ChangeDetectionStrategy3["Default"] = 1] = "Default";
+(function(ChangeDetectionStrategy2) {
+  ChangeDetectionStrategy2[ChangeDetectionStrategy2["OnPush"] = 0] = "OnPush";
+  ChangeDetectionStrategy2[ChangeDetectionStrategy2["Eager"] = 1] = "Eager";
+  ChangeDetectionStrategy2[ChangeDetectionStrategy2["Default"] = 1] = "Default";
 })(ChangeDetectionStrategy || (ChangeDetectionStrategy = {}));
 var TRACKED_LVIEWS = /* @__PURE__ */ new Map();
 var uniqueIdCounter = 0;
@@ -45130,11 +45130,11 @@ var AppComponent = class _AppComponent {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(AppComponent, [{
     type: Component,
-    args: [{ standalone: true, selector: "app-root", changeDetection: ChangeDetectionStrategy.Eager, imports: [RouterOutlet], template: "<router-outlet></router-outlet>" }]
+    args: [{ standalone: true, selector: "app-root", imports: [RouterOutlet], template: "<router-outlet></router-outlet>" }]
   }], null, null);
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(AppComponent, { className: "AppComponent", filePath: "src/app/app.component.ts", lineNumber: 12 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(AppComponent, { className: "AppComponent", filePath: "src/app/app.component.ts", lineNumber: 11 });
 })();
 
 // src/environments/environment.ts
@@ -88360,7 +88360,7 @@ var IframePartComponent = class _IframePartComponent {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(IframePartComponent, [{
     type: Component,
-    args: [{ standalone: true, selector: "app-iframe-part", changeDetection: ChangeDetectionStrategy.Eager, template: '<input #copyInput type="text" class="copy-input">\n<iframe #iframe (load)="onIframeLoad($event)" [src]="safeUrl" sandbox="allow-downloads allow-forms allow-modals allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts"\n  allow="accelerometer; bluetooth; camera; clipboard-read; clipboard-write; display-capture; encrypted-media; geolocation; gyroscope; language-detector; language-model; local-network-access; microphone; midi; rewriter; serial; summarizer; translator; web-share; writer; xr-spatial-tracking"></iframe>', styles: ["iframe{height:100%;width:100%;border:none;-webkit-user-select:none;user-select:none}#save-status{display:none!important}.copy-input{position:fixed;left:99999px;top:99999px}\n"] }]
+    args: [{ standalone: true, selector: "app-iframe-part", template: '<input #copyInput type="text" class="copy-input">\n<iframe #iframe (load)="onIframeLoad($event)" [src]="safeUrl" sandbox="allow-downloads allow-forms allow-modals allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts"\n  allow="accelerometer; bluetooth; camera; clipboard-read; clipboard-write; display-capture; encrypted-media; geolocation; gyroscope; language-detector; language-model; local-network-access; microphone; midi; rewriter; serial; summarizer; translator; web-share; writer; xr-spatial-tracking"></iframe>', styles: ["iframe{height:100%;width:100%;border:none;-webkit-user-select:none;user-select:none}#save-status{display:none!important}.copy-input{position:fixed;left:99999px;top:99999px}\n"] }]
   }], () => [{ type: Router }, { type: FiddleNotificationService }, { type: DomSanitizer }], { form: [{
     type: ViewChild,
     args: ["form"]
@@ -88375,7 +88375,7 @@ var IframePartComponent = class _IframePartComponent {
   }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(IframePartComponent, { className: "IframePartComponent", filePath: "src/app/iframe-part/iframe-part.component.ts", lineNumber: 37 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(IframePartComponent, { className: "IframePartComponent", filePath: "src/app/iframe-part/iframe-part.component.ts", lineNumber: 35 });
 })();
 
 // node_modules/@angular/forms/fesm2022/forms.mjs
@@ -93067,7 +93067,7 @@ var ModalComponent = class _ModalComponent {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(ModalComponent, [{
     type: Component,
-    args: [{ standalone: true, selector: "app-modal", changeDetection: ChangeDetectionStrategy.Eager, imports: [FormsModule, CommonModule], template: '<dialog #dialogElement closedby="any" (close)="onDialogClose()">\n  <div class="modal-header">\n    <h3 class="modal-title">{{title}}</h3>\n  </div>\n\n  <div class="modal-body">\n    <ng-content></ng-content>\n  </div>\n\n  <div class="modal-footer">\n    <button [disabled]="!hasValidationBtn" class="modal-header-btn modal-header-btn-validate btn"\n      (click)="onValidate()">\n      <i class="fa fa-check" aria-hidden="true"></i>\n    </button>\n\n    <button class="modal-header-btn modal-header-btn-close btn" (click)="hide()">\n      <i class="fa fa-times" aria-hidden="true"></i>\n    </button>\n  </div>\n</dialog>', styles: [".modal-container .modal-header{text-align:center;position:relative;display:flex;justify-content:space-between;padding:2px 4px}.modal-container .modal-header h3{margin:0}.modal-body{padding:0 2px;overflow:auto;flex-grow:1;border-radius:5px}.modal-header-btn{font-size:16px;cursor:pointer;display:block;text-align:center;border-width:1px;border-style:solid;-webkit-user-select:none;user-select:none;outline:none;padding:4px 12px;height:33px}.modal-header-btn-validate.btn{left:2px}.modal-header-btn-close.btn{right:2px}.modal-title{margin-top:5px;margin-bottom:5px;text-align:center}dialog[open]{top:5px;transform:translateY(0) translate(-50%);left:50%;width:50%;min-width:750px;border-radius:5px;display:flex;flex-direction:column;transition:.2s all;height:calc(100% - 10px);overflow:auto;padding:2px;margin:0;max-height:none;box-sizing:border-box;box-shadow:0 0 4px 2px #8b8b8b;border:none}dialog[open]::backdrop{-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);background-color:#0000004f}dialog .modal-footer{display:flex;justify-content:center;gap:20px;padding:2px 0 0}@media screen and (max-width:767px){dialog[open]{min-width:auto;width:calc(100% - 2px);max-width:none}}\n"] }]
+    args: [{ standalone: true, selector: "app-modal", imports: [FormsModule, CommonModule], template: '<dialog #dialogElement closedby="any" (close)="onDialogClose()">\n  <div class="modal-header">\n    <h3 class="modal-title">{{title}}</h3>\n  </div>\n\n  <div class="modal-body">\n    <ng-content></ng-content>\n  </div>\n\n  <div class="modal-footer">\n    <button [disabled]="!hasValidationBtn" class="modal-header-btn modal-header-btn-validate btn"\n      (click)="onValidate()">\n      <i class="fa fa-check" aria-hidden="true"></i>\n    </button>\n\n    <button class="modal-header-btn modal-header-btn-close btn" (click)="hide()">\n      <i class="fa fa-times" aria-hidden="true"></i>\n    </button>\n  </div>\n</dialog>', styles: [".modal-container .modal-header{text-align:center;position:relative;display:flex;justify-content:space-between;padding:2px 4px}.modal-container .modal-header h3{margin:0}.modal-body{padding:0 2px;overflow:auto;flex-grow:1;border-radius:5px}.modal-header-btn{font-size:16px;cursor:pointer;display:block;text-align:center;border-width:1px;border-style:solid;-webkit-user-select:none;user-select:none;outline:none;padding:4px 12px;height:33px}.modal-header-btn-validate.btn{left:2px}.modal-header-btn-close.btn{right:2px}.modal-title{margin-top:5px;margin-bottom:5px;text-align:center}dialog[open]{top:5px;transform:translateY(0) translate(-50%);left:50%;width:50%;min-width:750px;border-radius:5px;display:flex;flex-direction:column;transition:.2s all;height:calc(100% - 10px);overflow:auto;padding:2px;margin:0;max-height:none;box-sizing:border-box;box-shadow:0 0 4px 2px #8b8b8b;border:none}dialog[open]::backdrop{-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);background-color:#0000004f}dialog .modal-footer{display:flex;justify-content:center;gap:20px;padding:2px 0 0}@media screen and (max-width:767px){dialog[open]{min-width:auto;width:calc(100% - 2px);max-width:none}}\n"] }]
   }], () => [], { closeModal: [{
     type: Output
   }], validateEvent: [{
@@ -93081,7 +93081,7 @@ var ModalComponent = class _ModalComponent {
   }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(ModalComponent, { className: "ModalComponent", filePath: "src/app/modal/modal.component.ts", lineNumber: 13 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(ModalComponent, { className: "ModalComponent", filePath: "src/app/modal/modal.component.ts", lineNumber: 12 });
 })();
 
 // src/app/loader/loader.component.ts
@@ -93141,7 +93141,7 @@ var LoaderComponent = class _LoaderComponent {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(LoaderComponent, [{
     type: Component,
-    args: [{ standalone: true, selector: "app-loader", changeDetection: ChangeDetectionStrategy.Eager, imports: [CommonModule], template: `@if (isLoaderShow()) {
+    args: [{ standalone: true, selector: "app-loader", imports: [CommonModule], template: `@if (isLoaderShow()) {
 <div class="loader-wrapper" [ngClass]="{'global':global, 'sub-global':subGlobal}">
     <div class="loader-container" [ngStyle]="{'width': width, 'height': height}">
         <div [ngStyle]="{'border-width':thickness ? (thickness+'px') : ''}">
@@ -93172,7 +93172,7 @@ var LoaderComponent = class _LoaderComponent {
   }], isLoaderShow: [{ type: Input, args: [{ isSignal: true, alias: "isLoaderShow", required: false }] }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(LoaderComponent, { className: "LoaderComponent", filePath: "src/app/loader/loader.component.ts", lineNumber: 25 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(LoaderComponent, { className: "LoaderComponent", filePath: "src/app/loader/loader.component.ts", lineNumber: 23 });
 })();
 
 // src/app/services/ressources.service.ts
@@ -93925,7 +93925,7 @@ var RessourcesComponent = class _RessourcesComponent {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(RessourcesComponent, [{
     type: Component,
-    args: [{ standalone: true, selector: "app-ressources", changeDetection: ChangeDetectionStrategy.Eager, imports: [FormsModule, CommonModule, LoaderComponent], template: `<div class="ressources-container">
+    args: [{ standalone: true, selector: "app-ressources", imports: [FormsModule, CommonModule, LoaderComponent], template: `<div class="ressources-container">
     <div class="resources-tabs-mobile"
         [ngClass]="{'browse-mode' : (ressoucesMobileTab == 'browse'), 'select-mode' : (ressoucesMobileTab == 'select')}">
         <label for="ressources-mobile-tab-browse"
@@ -94052,7 +94052,7 @@ var RessourcesComponent = class _RessourcesComponent {
   }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(RessourcesComponent, { className: "RessourcesComponent", filePath: "src/app/ressources/ressources.component.ts", lineNumber: 48 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(RessourcesComponent, { className: "RessourcesComponent", filePath: "src/app/ressources/ressources.component.ts", lineNumber: 46 });
 })();
 
 // node_modules/@codemirror/commands/dist/index.js
@@ -100039,7 +100039,7 @@ var HtmlPartComponent = class _HtmlPartComponent {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(HtmlPartComponent, [{
     type: Component,
-    args: [{ standalone: true, selector: "app-html-part", changeDetection: ChangeDetectionStrategy.Eager, imports: [CodeEditor, FormsModule, ReactiveFormsModule], template: `<code-editor [languages]="languages" #codeMirrorEditor [autofocus]="true" [language]="'html'" lineWrapping="true" [formControl]="htmlCode" [indentWithTab]="true"/>` }]
+    args: [{ standalone: true, selector: "app-html-part", imports: [CodeEditor, FormsModule, ReactiveFormsModule], template: `<code-editor [languages]="languages" #codeMirrorEditor [autofocus]="true" [language]="'html'" lineWrapping="true" [formControl]="htmlCode" [indentWithTab]="true"/>` }]
   }], null, { toggleFullScreen: [{
     type: Output
   }], codeMirrorEditor: [{
@@ -100048,7 +100048,7 @@ var HtmlPartComponent = class _HtmlPartComponent {
   }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(HtmlPartComponent, { className: "HtmlPartComponent", filePath: "src/app/html-part/html-part.component.ts", lineNumber: 28 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(HtmlPartComponent, { className: "HtmlPartComponent", filePath: "src/app/html-part/html-part.component.ts", lineNumber: 26 });
 })();
 
 // src/app/css-part/css-part.component.ts
@@ -100103,7 +100103,7 @@ var CssPartComponent = class _CssPartComponent {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(CssPartComponent, [{
     type: Component,
-    args: [{ standalone: true, selector: "app-css-part", changeDetection: ChangeDetectionStrategy.Eager, imports: [CodeEditor, FormsModule, ReactiveFormsModule], template: `<code-editor [languages]="languages" #codeMirrorEditor [formControl]="cssCode" [language]="'css'" lineWrapping="true" [indentWithTab]="true"/>` }]
+    args: [{ standalone: true, selector: "app-css-part", imports: [CodeEditor, FormsModule, ReactiveFormsModule], template: `<code-editor [languages]="languages" #codeMirrorEditor [formControl]="cssCode" [language]="'css'" lineWrapping="true" [indentWithTab]="true"/>` }]
   }], null, { toggleFullScreen: [{
     type: Output
   }], codeMirrorEditor: [{
@@ -100112,7 +100112,7 @@ var CssPartComponent = class _CssPartComponent {
   }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(CssPartComponent, { className: "CssPartComponent", filePath: "src/app/css-part/css-part.component.ts", lineNumber: 32 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(CssPartComponent, { className: "CssPartComponent", filePath: "src/app/css-part/css-part.component.ts", lineNumber: 30 });
 })();
 
 // src/app/js-part/js-part.component.ts
@@ -100166,7 +100166,7 @@ var JsPartComponent = class _JsPartComponent {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(JsPartComponent, [{
     type: Component,
-    args: [{ standalone: true, selector: "app-js-part", changeDetection: ChangeDetectionStrategy.Eager, imports: [CodeEditor, FormsModule, ReactiveFormsModule], template: `<code-editor [languages]="languages" #codeMirrorEditor [formControl]="jsCode" [language]="'JavaScript'" lineWrapping="true" [indentWithTab]="true"/>` }]
+    args: [{ standalone: true, selector: "app-js-part", imports: [CodeEditor, FormsModule, ReactiveFormsModule], template: `<code-editor [languages]="languages" #codeMirrorEditor [formControl]="jsCode" [language]="'JavaScript'" lineWrapping="true" [indentWithTab]="true"/>` }]
   }], null, { toggleFullScreen: [{
     type: Output
   }], codeMirrorEditor: [{
@@ -100175,7 +100175,7 @@ var JsPartComponent = class _JsPartComponent {
   }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(JsPartComponent, { className: "JsPartComponent", filePath: "src/app/js-part/js-part.component.ts", lineNumber: 31 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(JsPartComponent, { className: "JsPartComponent", filePath: "src/app/js-part/js-part.component.ts", lineNumber: 29 });
 })();
 
 // src/app/fiddles-history/fiddles-history.component.ts
@@ -100415,7 +100415,7 @@ var FiddlesHistoryComponent = class _FiddlesHistoryComponent {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(FiddlesHistoryComponent, [{
     type: Component,
-    args: [{ standalone: true, selector: "app-fiddles-history", changeDetection: ChangeDetectionStrategy.Eager, imports: [LoaderComponent, FormsModule, CommonModule, RouterModule, DatePipe], template: `<div class="history-container" [ngClass]="{'loading': isLoading()}">
+    args: [{ standalone: true, selector: "app-fiddles-history", imports: [LoaderComponent, FormsModule, CommonModule, RouterModule, DatePipe], template: `<div class="history-container" [ngClass]="{'loading': isLoading()}">
   <div class="search-table">
     <input type="text" [(ngModel)]="searchText" [placeholder]="'Filter'" class="form-control" />
   </div>
@@ -100493,7 +100493,7 @@ var FiddlesHistoryComponent = class _FiddlesHistoryComponent {
   }], hideModal: [{ type: Output, args: ["hideModal"] }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(FiddlesHistoryComponent, { className: "FiddlesHistoryComponent", filePath: "src/app/fiddles-history/fiddles-history.component.ts", lineNumber: 34 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(FiddlesHistoryComponent, { className: "FiddlesHistoryComponent", filePath: "src/app/fiddles-history/fiddles-history.component.ts", lineNumber: 32 });
 })();
 
 // src/app/pastebin/pastebin.component.ts
@@ -100555,14 +100555,14 @@ var PastebinComponent = class _PastebinComponent {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(PastebinComponent, [{
     type: Component,
-    args: [{ standalone: true, selector: "app-pastebin", changeDetection: ChangeDetectionStrategy.Eager, imports: [FormsModule, CodeEditor, ReactiveFormsModule], template: '<code-editor [languages]="languages" #codeMirrorEditor [formControl]="pastebinText" lineWrapping="true"  [language]="pastebinSyntax()"/>' }]
+    args: [{ standalone: true, selector: "app-pastebin", imports: [FormsModule, CodeEditor, ReactiveFormsModule], template: '<code-editor [languages]="languages" #codeMirrorEditor [formControl]="pastebinText" lineWrapping="true"  [language]="pastebinSyntax()"/>' }]
   }], null, { codeMirrorEditor: [{
     type: ViewChild,
     args: ["codeMirrorEditor"]
   }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(PastebinComponent, { className: "PastebinComponent", filePath: "src/app/pastebin/pastebin.component.ts", lineNumber: 20 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(PastebinComponent, { className: "PastebinComponent", filePath: "src/app/pastebin/pastebin.component.ts", lineNumber: 19 });
 })();
 
 // src/app/main/main.component.ts
@@ -104526,7 +104526,13 @@ var FiddleEffects = class _FiddleEffects {
         if (hrefValue[hrefValue.length - 1] != "/") {
           hrefValue = hrefValue + "/";
         }
-        let text = hrefValue + (appName ? appName + "/" : "") + res.result[0].id;
+        let path = "";
+        if (res.result[0].appMode == "fiddle") {
+          path = "/playground/fiddle/" + res.result[0].id;
+        } else {
+          path = "/playground/pastebin/" + res.result[0].id;
+        }
+        let text = hrefValue + (appName ? appName : "") + path;
         let tempInput = document.createElement("input");
         tempInput.style.cssText = `
                             position:fixed;
