@@ -104522,9 +104522,9 @@ var FiddleEffects = class _FiddleEffects {
     return this.actions$.pipe(ofType(requestSavingFiddle), switchMap((actionprops) => {
       return this.mainService.saveFiddle().pipe(tap((res) => {
         let appName = environment.appName;
-        let hrefValue = window.location.origin;
-        if (hrefValue[hrefValue.length - 1] != "/") {
-          hrefValue = hrefValue + "/";
+        let locationOrigin = window.location.origin;
+        if (locationOrigin[locationOrigin.length - 1] != "/") {
+          locationOrigin = locationOrigin + "/";
         }
         let path = "";
         if (res.result[0].appMode == "fiddle") {
@@ -104532,7 +104532,7 @@ var FiddleEffects = class _FiddleEffects {
         } else {
           path = "/playground/pastebin/" + res.result[0].id;
         }
-        let text = hrefValue + (appName ? appName : "") + path;
+        let text = locationOrigin + (appName ? appName : "") + path;
         let tempInput = document.createElement("input");
         tempInput.style.cssText = `
                             position:fixed;
